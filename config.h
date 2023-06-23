@@ -1,6 +1,8 @@
 #pragma once
 #ifndef CONFIG
 #define CONFIG
+struct database;
+typedef struct databse database;
 #define MAX_FRAME_SIZE 1024		//接收和发送的帧的最大字节
 #define PORT 53
 #define MAX_LEN_IP 100

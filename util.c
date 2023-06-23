@@ -4,6 +4,18 @@
 #include<string.h>
 #include"config.h"
 #include"util.h"
+
+
+
+
+
+
+
+
+
+
+
+
 void printHexToBinary(char* hexArray, int length) {
     for (int i = 0; i < length; i++) {
         printHex(hexArray[i]);
@@ -33,21 +45,6 @@ void printHex(char hex) {
 
 
 
-
-
-
-
-
-void toHex(char ch,char* c1,char* c2) {
-    (*c1)=(ch >> 4) & 0xF; 
-    (*c2)= ch & 0xF; 
-}
-//存的是4位按照位存储的char，即：0000 0010这种
-void toCharArrayHex(char arr[], int size, char* hexArray) {
-    for (int i = 0; i < size; i++) {
-        toHex(arr[i], &hexArray[2 * i], &hexArray[2 * i + 1]);
-    }
-}
 
 
 
