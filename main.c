@@ -12,7 +12,6 @@ int main(void) {
 	SOCKET socketfd;
 	struct sockaddr_in serverAddr;
 	struct sockaddr_in clientAddr;
-	char buff[MAX_FRAME_SIZE] = { 0 };
 	int clientAddrLen = sizeof(clientAddr);
 	char frame[MAX_FRAME_SIZE] = { 0 };
 
@@ -44,10 +43,18 @@ int main(void) {
 
 	}
 	
+
+
+
+
+
+
+
+
+
 	//dns服务器主体
 	while (1) {
-		int frameSize = recvfrom(socketfd, buff, sizeof(buff), 0, (struct sockaddr*)&clientAddr, &clientAddrLen);
- 		toCharArrayHex(buff, frameSize,frame);
+		int frameSize = recvfrom(socketfd, frame, sizeof(frame), 0, (struct sockaddr*)&clientAddr, &clientAddrLen);
 		/*打印帧的十六进制
 		for (int i = 0; i<=frameSize; i++) {
 			printf("%x", frame[i]);

@@ -18,8 +18,8 @@ typedef struct query {
 
 typedef struct requestionFrame
 {
-	char ip[MAX_LEN_IP];
-	char domain[MAX_LEN_DOMAIN];
+	char ip[MAX_QUERIES_COUNT][MAX_LEN_IP];
+	char domain[MAX_QUERIES_COUNT][MAX_LEN_DOMAIN];
 	unsigned char id[5];
 	unsigned char qr;
 	unsigned char opcode;
