@@ -120,7 +120,7 @@ void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 	char* ptr=&frame[24];
 	char* q_char[100] = { 0 };
 	printf("query:");
-	for (int j = 0;j<(frameSize-24)*2; j++) {
+	for (int j = 0;j<(frameSize-12); j++) {
 		q_char[j] += (*ptr) << 4;
 		ptr++;
 		q_char[j] += (*ptr);
