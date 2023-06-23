@@ -116,10 +116,23 @@ void getAdditionCount(char* frame, int* additionCount) {
 	*additionCount = c[0] * 16 * 16 * 16 + c[1] * 16 * 16 + c[2] * 16 + c[3];
 	printf("questionCount:%d\n", *additionCount);
 }
-void getQueries(char* frame,int queriesCount,query* q) {
+void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 	char* ptr=&frame[24];
+	char* q_char[100] = { 0 };
+	printf("query:");
+	for (int j = 0;j<(frameSize-24)*2; j++) {
+		q_char[j] += (*ptr) << 4;
+		ptr++;
+		q_char[j] += (*ptr);
+		ptr++;
+		if (q_char[j] < 30)
+			printf("%d", q_char[j]);
+		else
+			printf("%c", q_char[j]);
+	}
 	for (int i = 0; i < queriesCount; i++) {
-
+		
+		
 	}
 }
 int makeFrame(char ip[], char returnFrame[]) {
@@ -146,7 +159,7 @@ int processFrame(char frame[], int frameSize, char returnFrame[]) {
 	getAnswerCount(frame, &rf->answerCount);
 	getAuthorityCount(frame, &rf->authorityCount);
 	getAdditionCount(frame, &rf->additionCount);
-	getQueries(frame, rf->questionCount, &rf->queries);
+	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
 	
 
 	
