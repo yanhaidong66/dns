@@ -1,8 +1,18 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
+
+
+#include<stdio.h>
+#include<stdlib.h>
 #include"config.h"
+#include"database.h"
+#include"processFrame.h"
+#include"util.h"
 
 
-typedef struct databse {
+//数据结构部分
+
+typedef struct database {
 	char ip[MAX_DATABSE_IP_COUNT][MAX_LEN_IP];//从txt中读入的ip数组，一维下表和domain相同代表对应
 	char domain[MAX_DATABASE_DOMAIN_COUNT][MAX_LEN_DOMAIN];//从txt中读入的domain数组，一维下表和ip相同代表对应
 	int size;	//databse中存储的ip-domian的数量
@@ -34,4 +44,6 @@ typedef struct requestionFrame
 	unsigned int additionCount;
 	query queries[5];
 }requestionFrame;
+
+
 

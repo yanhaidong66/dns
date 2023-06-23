@@ -1,10 +1,7 @@
-#include<stdlib.h>
 #include<WinSock2.h>
-#include<stdio.h>
-#include"util.h"
-#include"processFrame.h"
-#include"config.h"
-#include"struct.h"
+#include"head.h"
+
+
 database db;
 int main(void) {
 	readFromTxt("dnsrelay.txt");
@@ -14,7 +11,6 @@ int main(void) {
 	struct sockaddr_in clientAddr;
 	int clientAddrLen = sizeof(clientAddr);
 	char frame[MAX_FRAME_SIZE] = { 0 };
-
 
 	{//配置socket
 
@@ -54,16 +50,14 @@ int main(void) {
 
 	//dns服务器主体
 	while (1) {
-		int frameSize = recvfrom(socketfd, frame, sizeof(frame), 0, (struct sockaddr*)&clientAddr, &clientAddrLen);
-		/*打印帧的十六进制
-		for (int i = 0; i<=frameSize; i++) {
-			printf("%x", frame[i]);
-		}*/
-		printHexToBinary(frame, frameSize);
-		
+		int frameSize = recvfrom(socketfd, frame, sizeof(frame), 0, (struct sockaddr*)&clientAddr, &clientAddrLen);	
 		if (frameSize < 0) {
 			perror("Error in recvfrom");
 			continue;
+		}
+		for (int i = 0; i < frameSize; i++) {
+			printHex(frame[i]);
+			printf(" ");
 		}
 		char return_frame[MAX_FRAME_SIZE];
 		frameSize = processFrame(frame, frameSize,return_frame);

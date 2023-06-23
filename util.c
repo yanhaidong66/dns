@@ -1,19 +1,15 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
-#include"config.h"
-#include"util.h"
+#include"head.h"
+//全局变量
+extern database db;
 
 
-
-
-void printHexToBinary(char* hexArray, int length) {
+void printCharToBinary(char* a, int length) {
     for (int i = 0; i < length; i++) {
-        printHex(hexArray[i]);
+        printHex(a[i]);
     }
     printf("\n");
 }
+
 
 void printHex(char hex) {
     char c[8] = { 0 };

@@ -128,7 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="databseFunction.cpp" />
+    <ClCompile Include="databaseFunction.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="processFrame.c" />
     <ClCompile Include="util.c" />
@@ -136,8 +136,8 @@
   <ItemGroup>
     <ClInclude Include="config.h" />
     <ClInclude Include="database.h" />
+    <ClInclude Include="head.h" />
     <ClInclude Include="processFrame.h" />
-    <ClInclude Include="struct.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>

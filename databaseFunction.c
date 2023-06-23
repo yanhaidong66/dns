@@ -1,10 +1,8 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include<stdlib.h>
-#include<stdio.h>
-#include"config.h"
-#include"struct.h"
-
+#include"head.h"
+//全局变量
 extern database db;
+
+
 //字符组清零
 void toZero(char* s) {
     for (int i = 0; s[i] != '\0'; i++) {
@@ -47,5 +45,10 @@ void readFromTxt(const char path[]) {
 }
 
 void writeIntoTxt(const char path[]) {
+
+}
+
+
+void search(char domain[],char ip[]) {
 
 }
