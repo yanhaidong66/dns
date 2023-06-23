@@ -61,28 +61,6 @@ void lineToIpAndDomain(char line[],char ip[],char domain[]) {
         domain[j] = line[i];
     }
 }
-void readFromTxt(const char path[]) {
-    FILE* file = fopen(path, "r"); // 打开文件，以只读模式打开
-
-    if (file == NULL) {
-        printf("无法打开文件\n");
-        return 1;
-    }
-
-    // 读取文件内容
-    char line[500];
-    fgets(line, sizeof(line), file);
-    for (int i = 0; fgets(line, sizeof(line), file) != NULL; i++) {
-        lineToIpAndDomain(line, ip_in_buff[i], domain_in_buff[i]);
-        toZero(line);
-        //printf("%d:%s\n%s\n", i, ip_in_buff[i], domain_in_buff[i]);
-    }
-    
-
-    fclose(file); // 关闭文件
-
-    return 0;
-}
 
 
 
