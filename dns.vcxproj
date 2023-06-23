@@ -128,13 +128,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="databseAccessFunction.cpp" />
+    <ClCompile Include="databseFunction.cpp" />
     <ClCompile Include="main.c" />
     <ClCompile Include="processFrame.c" />
     <ClCompile Include="util.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="database.h" />
     <ClInclude Include="processFrame.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="util.h" />

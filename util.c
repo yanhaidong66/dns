@@ -8,14 +8,6 @@
 
 
 
-
-
-
-
-
-
-
-
 void printHexToBinary(char* hexArray, int length) {
     for (int i = 0; i < length; i++) {
         printHex(hexArray[i]);

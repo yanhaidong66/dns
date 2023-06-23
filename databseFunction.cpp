@@ -4,6 +4,7 @@
 #include"config.h"
 #include"struct.h"
 
+extern database db;
 //字符组清零
 void toZero(char* s) {
     for (int i = 0; s[i] != '\0'; i++) {
@@ -38,9 +39,13 @@ void readFromTxt(const char path[]) {
     for (int i = 0; fgets(line, sizeof(line), file) != NULL; i++) {
         lineToIpAndDomain(line, db.ip[i], db.domain[i]);
         toZero(line);
-        printf("%d:%s\n%s\n", i, db.ip[i], db.domian[i]);
+        printf("%d:%s\n%s\n", i, db.ip[i], db.domain[i]);
     }
 
 
     fclose(file); // 关闭文件
+}
+
+void writeIntoTxt(const char path[]) {
+
 }
