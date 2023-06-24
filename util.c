@@ -32,6 +32,12 @@ void printHex(char hex) {
 }
 
 
+void frameCopy(char destance[], char source[], int sourceLen) {
+    for (int i = 0; i < sourceLen; i++) {
+        destance[i] = source[i];
+    }
+}
+
 
 
 

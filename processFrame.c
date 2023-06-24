@@ -138,7 +138,7 @@ void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 		
 	}
 }
-int makeFrame(char ip[], char returnFrame[]) {
+int makeRespnseFrame(responseFrame* responseFrame,requestionFrame requestionFrame) {
 
 }
 
@@ -148,6 +148,9 @@ int makeFrame(char ip[], char returnFrame[]) {
 //传入的是frame的char为流的8位
 int processFrame(char frame[], int frameSize, char returnFrame[]) {
 	requestionFrame* rf=(requestionFrame*)calloc(sizeof(requestionFrame),1);
+	responseFrame* rpf = (responseFrame*)calloc(sizeof(responseFrame), 1);
+	frameCopy(rf->frame, frame, frameSize);
+	rf->sizeOfFrame = frameSize;
 	getId(frame, rf->id);
 	getQr(frame, &rf->qr);
 	getOpcode(frame, &rf->opcode);
@@ -163,7 +166,7 @@ int processFrame(char frame[], int frameSize, char returnFrame[]) {
 	getAuthorityCount(frame, &rf->authorityCount);
 	getAdditionCount(frame, &rf->additionCount);
 	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
-	
+	makeResponseFrame(rpf,*rf);
 
 	
 }

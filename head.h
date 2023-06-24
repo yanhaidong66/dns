@@ -28,6 +28,8 @@ typedef struct query {
 
 typedef struct requestionFrame
 {
+	char frame[MAX_FRAME_SIZE];
+	int sizeOfFrame;
 	char ip[MAX_QUERIES_COUNT][MAX_LEN_IP];
 	char domain[MAX_QUERIES_COUNT][MAX_LEN_DOMAIN];
 	unsigned char id[5];
@@ -45,5 +47,9 @@ typedef struct requestionFrame
 	query queries[5];
 }requestionFrame;
 
+typedef struct responseFrame {
+	char frame[MAX_FRAME_SIZE];
+	int sizeOfFrame;
 
+}responseFrame;
 

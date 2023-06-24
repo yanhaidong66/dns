@@ -1,4 +1,4 @@
-#include"head.h"
+ #include"head.h"
 //全局变量
 extern database db;
 
