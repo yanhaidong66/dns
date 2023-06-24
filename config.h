@@ -5,6 +5,7 @@
 #define CONFIG
 #define MAX_FRAME_SIZE 1024		//接收和发送的帧的最大字节
 #define PORT 53
+#define WITH_ISP_PORT 5999
 #define MAX_LEN_IP 100
 #define MAX_LEN_DOMAIN 100
 #define MAX_DATABSE_IP_COUNT 1000			//database最多能存储的ip数量

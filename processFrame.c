@@ -231,11 +231,18 @@ responseFrame* processFrame(char frame[], int frameSize, char returnFrame[]) {
 	getAdditionCount(frame, &rf->additionCount);
 	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
 
+	//如果查找到ip
+	if (searchIp(rf->domain[0], rf->ip[0])==1) {
+		makeRespnseFrame(rpf,*rf);
+		free(rf);
+		return rpf;
+	}
+	//查不到ip
+	else {
+		return NULL;
+	}
+	
 
-
-	makeRespnseFrame(rpf,*rf);
-
-	free(rf);
-	return rpf;
+	
 	
 }
