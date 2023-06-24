@@ -1,7 +1,5 @@
 #include<WinSock2.h>
 #include"head.h"
-
-
 database db;
 int main(void) {
 	readFromTxt("dnsrelay.txt");

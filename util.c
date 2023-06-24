@@ -1,7 +1,5 @@
 #include"head.h"
-//全局变量
 extern database db;
-
 
 void printCharToBinary(char* a, int length) {
     for (int i = 0; i < length; i++) {

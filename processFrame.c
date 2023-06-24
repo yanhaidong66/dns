@@ -1,5 +1,4 @@
 #include"head.h"
-//全局变量
 extern database db;
 
 void getDomain(char frame[], char domain[]) {
@@ -138,8 +137,19 @@ void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 		
 	}
 }
-int makeRespnseFrame(responseFrame* responseFrame,requestionFrame requestionFrame) {
 
+
+
+
+int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
+	frameCopy(rpf->frame, rf.frame, rf.sizeOfFrame);
+	rpf->sizeOfFrame = rf.sizeOfFrame;
+
+
+
+
+
+	return 1;
 }
 
 
@@ -167,6 +177,7 @@ int processFrame(char frame[], int frameSize, char returnFrame[]) {
 	getAdditionCount(frame, &rf->additionCount);
 	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
 	makeResponseFrame(rpf,*rf);
+	printf("frame::::::%s", rpf->frame);
 
 	
 }

@@ -3,8 +3,8 @@
 #ifndef PROCESSFRAME
 #define PROCESSFRAME
 
-int processFrame(char buff[], int buffLen, char return_frame[]);
-int makeRespnseFrame(responseFrame* responseFrame, requestionFrame requestionFrame);
+int processFrame(char frame[], int frameLen, char return_frame[]);
+int makeRespnseFrame(responseFrame* rpf, requestionFrame rf);
 
 #endif // !PROCESSFRAME
 

@@ -1,7 +1,5 @@
  #include"head.h"
-//全局变量
 extern database db;
-
 
 //字符组清零
 void toZero(char* s) {

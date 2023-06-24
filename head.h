@@ -26,7 +26,7 @@ typedef struct query {
 
 
 
-typedef struct requestionFrame
+typedef struct requestion
 {
 	char frame[MAX_FRAME_SIZE];
 	int sizeOfFrame;
@@ -47,7 +47,7 @@ typedef struct requestionFrame
 	query queries[5];
 }requestionFrame;
 
-typedef struct responseFrame {
+typedef struct response {
 	char frame[MAX_FRAME_SIZE];
 	int sizeOfFrame;
 
