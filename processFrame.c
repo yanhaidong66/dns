@@ -19,17 +19,14 @@ void getId(char* frame, unsigned char* id) {
 	printf("\n");
 	
 }
-void getQr(char* frame, unsigned char* qr) {
-	char c = frame[2];
-	printHex(c);
-	char x = c >> 7;
+void getQr(unsigned char* frame, unsigned char* qr) {
+	unsigned char c = frame[2];
 	*qr = (c>>7)&0b1;
 	printf("qr:" );
 	printHex(*qr);
 	printf("\n");
-	
 }
-//将帧中的opcode存储在传入变量opcode的第四位中
+
 void getOpcode(char* frame,unsigned char* opcode) {
 	char c=frame[2];
 	*opcode = (c&01111000)>>3;
@@ -82,7 +79,8 @@ void getRcode(char* frame, unsigned char* rcode) {
 
 void getQueryCount(char* frame,int* questionCount) {
 	unsigned char c[2];
-	c[0] = frame[4];
+	//c[0] = frame[4];
+	c[0] = 0b0001;
 	c[1] = frame[5];
 
 	*questionCount = c[0] * 256+ c[1] ;

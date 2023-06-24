@@ -25,7 +25,7 @@ void printHex(char hex) {
     c[1] = (c[1] & 0b10) >> 1;
     c[0] = (c[0] & 0b1);
     printf(" ");
-    for (int i = 0; i < 8; i++) {
+    for (int i = 7; i >=0; i--) {
         printf("%d", c[i]);
     }
     printf(" ");
