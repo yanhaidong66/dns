@@ -18,6 +18,7 @@ void getId(char* frame, unsigned char* id) {
 	printf("\n");
 	
 }
+//0是查询dns报文，1是回应dns报文
 void getQr(unsigned char* frame, unsigned char* qr) {
 	unsigned char c = frame[2];
 	*qr = (c>>7)&0b1;
@@ -34,7 +35,7 @@ void getOpcode(char* frame,unsigned char* opcode) {
 	printf("\n");
 
 }
-//第六位
+//
 void getAa(char* frame, unsigned char* aa) {
 	unsigned char c = frame[2];
 	*aa = (c & 0b00000100)>>2;
@@ -43,7 +44,7 @@ void getAa(char* frame, unsigned char* aa) {
 	printf("\n");
 
 }
-//第七位
+//tc：请求报文中的，udp可否截断
 void getTc(char* frame, unsigned char* tc) {
 	unsigned char c = frame[2];
 	*tc = (c & 0b00000010) >> 1;
@@ -51,7 +52,7 @@ void getTc(char* frame, unsigned char* tc) {
 	printBinary(*tc);
 	printf("\n");
 }
-//第八位
+//rd：是否递归请求
 void getRd(char* frame, unsigned char* rd) {
 	unsigned char c = frame[2];
 	*rd = (c & 0b1);
@@ -59,7 +60,7 @@ void getRd(char* frame, unsigned char* rd) {
 	printBinary(*rd);
 	printf("\n");
 }
-//第九位
+//ra：服务器回应，是否可用递归查询
 void getRa(char* frame, unsigned char* ra) {
 	unsigned char c = frame[3];
 	*ra = (c & 0b10000000) >> 7;
@@ -140,13 +141,34 @@ void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 
 
 
-
+//制作回应帧，要求改变flags位（qr：改为0，回应报文,ra：改为1，dns服务器可用递归）和answer rrs位为1.query部分不需要改变，在query最后添加answer rrs
 int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 	frameCopy(rpf->frame, rf.frame, rf.sizeOfFrame);
+	//将qr改为1，标志为回应报文
+	char qr = rpf->frame[2];
+	qr = qr | 0b10000000;
+	rpf->frame[2] = qr;
+
+
+
+	//将ra改为1，服务器可用递归查询
+	char ra = rpf->frame[3];
+	ra = ra | 0b10000000;
+	rpf->frame[3] = ra;
+
+
+	//将answer rrs数设置为1
+	char answerCount= rpf->frame[7];
+	answerCount = 1;
+	rpf->frame[7] = answerCount;
+
+
+
+
 	rpf->sizeOfFrame = rf.sizeOfFrame;
 
-
-
+	printf("responseFrame:\n");
+	printCharToBinary(rpf->frame, rpf->sizeOfFrame);
 
 
 	return 1;
@@ -177,8 +199,6 @@ int processFrame(char frame[], int frameSize, char returnFrame[]) {
 	getAdditionCount(frame, &rf->additionCount);
 	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
 	makeRespnseFrame(rpf,*rf);
-	printCharToBinary(rpf->frame,rpf->sizeOfFrame);
-	printf("frameSize::::::%d", rpf->sizeOfFrame);
 
 	
 }
