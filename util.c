@@ -36,6 +36,11 @@ void frameCopy(char destance[], char source[], int sourceLen) {
     }
 }
 
+void strCopy(char destance[], char source[]) {
+    for (int i = 0; source[i]!='\0'; i++) {
+        destance[i] = source[i];
+    }
+}
 
 
 

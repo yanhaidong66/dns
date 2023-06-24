@@ -55,8 +55,8 @@ int main(void) {
 		}
 		printCharToBinary(frame, frameSize);
 		char return_frame[MAX_FRAME_SIZE];
-		frameSize = processFrame(frame, frameSize,return_frame);
-		if (sendto(socketfd, return_frame, frameSize, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
+		responseFrame* response = processFrame(frame, frameSize,return_frame);
+		if (sendto(socketfd, response->frame, response->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
 			perror("Error in sendto");
 			exit(EXIT_FAILURE);
 		}

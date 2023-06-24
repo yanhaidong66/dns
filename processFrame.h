@@ -5,7 +5,7 @@
 typedef struct response responseFrame;
 typedef struct requestion requestionFrame;
 int makeRespnseFrame(responseFrame* rpf, requestionFrame* rf);
-int processFrame(char frame[], int frameLen, char return_frame[]);
+responseFrame* processFrame(char frame[], int frameLen, char return_frame[]);
 
 
 #endif // !PROCESSFRAME

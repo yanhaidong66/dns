@@ -162,10 +162,42 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 	answerCount = 1;
 	rpf->frame[7] = answerCount;
 
+	//制作answer rrs部分
+	char answer[32];
+	//设置response回答的域名，是一个指针，固定指向query的域名位置
+	answer[0] = 0xc0;
+	answer[1] = 0x0c;
+	//设置rrs的type
+	answer[2]=0;
+	answer[3]=1;
+	//设置rrs的class
+	answer[4]=0;
+	answer[5]=1;
+	//设置time to live，回答在客户电脑中存放多长时间
+	answer[6];
+	answer[7];
+	answer[8];
+	answer[9];
+	//rrs内容的字节数（也就是ip地址的长度，为4）
+	answer[10]=0;
+	answer[11]=4;
+	//设置ip地址,将字符串ip转换为4个每个8位都用来存储的char
+	char ip[MAX_LEN_IP] = { 0 };
+	strCopy(ip, rf.ip[0]);
+	for (int i = 12; i < 16; i++) {
+		
+
+	}
+	
+
+
+	//将answer rrs添加到query末尾
+	frameCopy(&rpf->frame[rf.sizeOfFrame], answer, 16);
 
 
 
-	rpf->sizeOfFrame = rf.sizeOfFrame;
+
+	rpf->sizeOfFrame = rf.sizeOfFrame+16;
 
 	printf("responseFrame:\n");
 	printCharToBinary(rpf->frame, rpf->sizeOfFrame);
@@ -178,7 +210,7 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 
 
 //传入的是frame的char为流的8位
-int processFrame(char frame[], int frameSize, char returnFrame[]) {
+responseFrame* processFrame(char frame[], int frameSize, char returnFrame[]) {
 	requestionFrame* rf=(requestionFrame*)calloc(sizeof(requestionFrame),1);
 	responseFrame* rpf = (responseFrame*)calloc(sizeof(responseFrame), 1);
 	frameCopy(rf->frame, frame, frameSize);
@@ -198,7 +230,12 @@ int processFrame(char frame[], int frameSize, char returnFrame[]) {
 	getAuthorityCount(frame, &rf->authorityCount);
 	getAdditionCount(frame, &rf->additionCount);
 	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
+
+
+
 	makeRespnseFrame(rpf,*rf);
 
+	free(rf);
+	return rpf;
 	
 }
