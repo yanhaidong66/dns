@@ -53,10 +53,7 @@ int main(void) {
 			perror("Error in recvfrom");
 			continue;
 		}
-		for (int i = 0; i < frameSize; i++) {
-			printHex(frame[i]);
-			printf(" ");
-		}
+		printCharToBinary(frame, frameSize);
 		char return_frame[MAX_FRAME_SIZE];
 		frameSize = processFrame(frame, frameSize,return_frame);
 		if (sendto(socketfd, return_frame, frameSize, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {

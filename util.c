@@ -3,13 +3,13 @@ extern database db;
 
 void printCharToBinary(char* a, int length) {
     for (int i = 0; i < length; i++) {
-        printHex(a[i]);
+        printBinary(a[i]);
     }
     printf("\n");
 }
 
 
-void printHex(char hex) {
+void printBinary(char hex) {
     char c[8] = { 0 };
     for (int i = 0; i < 8; i++) {
         c[i] = hex;

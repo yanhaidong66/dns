@@ -13,7 +13,7 @@ void getId(char* frame, unsigned char* id) {
 	printf("\nid:");
 	for (int i = 0; i < 2; i++) {
 		id[i] = frame[i];
-		printHex(id[i]);
+		printBinary(id[i]);
 	}
 	printf("\n");
 	
@@ -22,7 +22,7 @@ void getQr(unsigned char* frame, unsigned char* qr) {
 	unsigned char c = frame[2];
 	*qr = (c>>7)&0b1;
 	printf("qr:" );
-	printHex(*qr);
+	printBinary(*qr);
 	printf("\n");
 }
 
@@ -30,7 +30,7 @@ void getOpcode(char* frame,unsigned char* opcode) {
 	char c=frame[2];
 	*opcode = (c&01111000)>>3;
 	printf("opcode:");
-	printHex(*opcode);
+	printBinary(*opcode);
 	printf("\n");
 
 }
@@ -39,7 +39,7 @@ void getAa(char* frame, unsigned char* aa) {
 	unsigned char c = frame[2];
 	*aa = (c & 0b00000100)>>2;
 	printf("aa:");
-	printHex(*aa);
+	printBinary(*aa);
 	printf("\n");
 
 }
@@ -48,7 +48,7 @@ void getTc(char* frame, unsigned char* tc) {
 	unsigned char c = frame[2];
 	*tc = (c & 0b00000010) >> 1;
 	printf("tc:");
-	printHex(*tc);
+	printBinary(*tc);
 	printf("\n");
 }
 //第八位
@@ -56,7 +56,7 @@ void getRd(char* frame, unsigned char* rd) {
 	unsigned char c = frame[2];
 	*rd = (c & 0b1);
 	printf("rd:");
-	printHex(*rd);
+	printBinary(*rd);
 	printf("\n");
 }
 //第九位
@@ -64,7 +64,7 @@ void getRa(char* frame, unsigned char* ra) {
 	unsigned char c = frame[3];
 	*ra = (c & 0b10000000) >> 7;
 	printf("ra:");
-	printHex(*ra);
+	printBinary(*ra);
 	printf("\n");
 }
 //十二位到十六位
@@ -72,7 +72,7 @@ void getRcode(char* frame, unsigned char* rcode) {
 	unsigned char c = frame[3];
 	*rcode = c&0b1111;
 	printf("rcode:");
-	printHex(*rcode);
+	printBinary(*rcode);
 	printf("\n");
 }
 
@@ -176,8 +176,9 @@ int processFrame(char frame[], int frameSize, char returnFrame[]) {
 	getAuthorityCount(frame, &rf->authorityCount);
 	getAdditionCount(frame, &rf->additionCount);
 	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
-	makeResponseFrame(rpf,*rf);
-	printf("frame::::::%s", rpf->frame);
+	makeRespnseFrame(rpf,*rf);
+	printCharToBinary(rpf->frame,rpf->sizeOfFrame);
+	printf("frameSize::::::%d", rpf->sizeOfFrame);
 
 	
 }
