@@ -19,7 +19,7 @@ typedef struct database {
 }database;
 
 typedef struct query {
-	char domain[30][30];
+	char domain[MAX_QUERIES_COUNT][MAX_LEN_DOMAIN];
 	char type;
 	char query_class;
 }query;

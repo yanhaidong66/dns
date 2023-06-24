@@ -79,8 +79,7 @@ void getRcode(char* frame, unsigned char* rcode) {
 
 void getQueryCount(char* frame,int* questionCount) {
 	unsigned char c[2];
-	//c[0] = frame[4];
-	c[0] = 0b0001;
+	c[0] = frame[4];
 	c[1] = frame[5];
 
 	*questionCount = c[0] * 256+ c[1] ;
@@ -111,15 +110,30 @@ void getAdditionCount(char* frame, int* additionCount) {
 	printf("questionCount:%d\n", *additionCount);
 }
 void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
-	char* ptr=&frame[12];
-	printf("query:");
-	for (int j = 0;j<(frameSize-12); j++) {
-		if (ptr[j] < 30)
-			printf("%d", ptr[j]);
-		else
-			printf("%c", ptr[j]);
-	}
-	for (int i = 0; i < queriesCount; i++) {
+	char* ptr=&frame[13];//指向frame的指针，挨个读取内容
+	
+	for (int query_count = 0; query_count < queriesCount; query_count++) {
+		
+		int k = 0;//q中的一个domain的字符位置
+		printf("query(%d):\n",query_count);
+		for (;(*ptr)!='\0'; ptr++) {
+			
+			if ((*ptr) < 30) {
+			q->domain[query_count][k] = '.';
+			k++;
+			}
+			else {
+				q->domain[query_count][k] = *ptr;
+				k++;
+			}
+		}
+		ptr++;
+		q->type = (*ptr) * 256 + *(++ptr);
+		ptr++;
+		q->query_class = (*ptr) * 256 + *(++ptr);
+		printf("type:%d\n",q->type);
+		printf("class:%d\n",q->query_class);
+		printf("%s\n", q->domain[query_count]);
 		
 		
 	}
@@ -133,7 +147,7 @@ int makeFrame(char ip[], char returnFrame[]) {
 
 //传入的是frame的char为流的8位
 int processFrame(char frame[], int frameSize, char returnFrame[]) {
-	requestionFrame* rf=(requestionFrame*)malloc(sizeof(requestionFrame));
+	requestionFrame* rf=(requestionFrame*)calloc(sizeof(requestionFrame),1);
 	getId(frame, rf->id);
 	getQr(frame, &rf->qr);
 	getOpcode(frame, &rf->opcode);
