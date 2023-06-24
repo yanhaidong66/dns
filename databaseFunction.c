@@ -49,6 +49,10 @@ void writeIntoTxt(const char path[]) {
 }
 
 
-void search(char domain[],char ip[]) {
+int search(char domain[],char ip[]) {
+
+}
+
+int addIpAndDomain(char domain[], char ip[]) {
 
 }

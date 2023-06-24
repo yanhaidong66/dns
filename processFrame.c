@@ -21,7 +21,9 @@ void getId(char* frame, unsigned char* id) {
 }
 void getQr(char* frame, unsigned char* qr) {
 	char c = frame[2];
-	*qr = c>>7;
+	printHex(c);
+	char x = c >> 7;
+	*qr = (c>>7)&0b1;
 	printf("qr:" );
 	printHex(*qr);
 	printf("\n");
