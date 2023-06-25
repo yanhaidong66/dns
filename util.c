@@ -1,5 +1,4 @@
 #include"head.h"
-extern database db;
 
 void printCharToBinary(char* a, int length) {
     for (int i = 0; i < length; i++) {

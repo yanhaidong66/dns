@@ -1,5 +1,4 @@
 #include"head.h"
-extern database db;
 
 void getDomain(char frame[], char domain[]) {
 	
@@ -112,18 +111,17 @@ void getAdditionCount(char* frame, int* additionCount) {
 void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 	char* ptr=&frame[13];//指向frame的指针，挨个读取内容
 	
-	for (int query_count = 0; query_count < queriesCount; query_count++) {
-		
+
 		int k = 0;//q中的一个domain的字符位置
-		printf("query(%d):\n",query_count);
+		printf("query:\n");
 		for (;(*ptr)!='\0'; ptr++) {
 			
 			if ((*ptr) < 30) {
-			q->domain[query_count][k] = '.';
+			q->domain[k] = '.';
 			k++;
 			}
 			else {
-				q->domain[query_count][k] = *ptr;
+				q->domain[k] = *ptr;
 				k++;
 			}
 		}
@@ -133,10 +131,10 @@ void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 		q->query_class = (*ptr) * 256 + *(++ptr);
 		printf("type:%d\n",q->type);
 		printf("class:%d\n",q->query_class);
-		printf("%s\n", q->domain[query_count]);
+		printf("%s\n", q->domain);
 		
 		
-	}
+	
 }
 
 
@@ -210,7 +208,7 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 
 
 //传入的是frame的char为流的8位
-responseFrame* processFrame(char frame[], int frameSize, char returnFrame[]) {
+responseFrame* processFrame(char frame[], int frameSize) {
 	requestionFrame* rf=(requestionFrame*)calloc(sizeof(requestionFrame),1);
 	responseFrame* rpf = (responseFrame*)calloc(sizeof(responseFrame), 1);
 	frameCopy(rf->frame, frame, frameSize);
@@ -241,8 +239,5 @@ responseFrame* processFrame(char frame[], int frameSize, char returnFrame[]) {
 	else {
 		return NULL;
 	}
-	
 
-	
-	
 }

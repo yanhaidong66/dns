@@ -1,38 +1,75 @@
-#include<WinSock2.h>
 #include"head.h"
+
+//全局变量区
 database db;
+int clientId_frameId[MAX_CLIENT][MAX_FRAME_FORWARD] ;//用户和没有在数据库找到的domain的帧id
+SOCKET socketWithIsp;	//和因特网DNS服务商通信的socket
+SOCKET socketWithClient;	//和用户通信的socket
+struct sockaddr_in ispAddr;	//因特网DNS提供商的地址
+struct sockaddr_in clientAddr;	//给这个程序发送请求的客户端的地址
+struct sockaddr_in programeAddrToIsp;	//对于因特网DNS服务提供商，这个程序的地址
+struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
+int clientAddrLen ;
+int ispAddrLen;
+
+
 int main(void) {
 	readFromTxt("dnsrelay.txt");
 	WSADATA wsaData;
-	SOCKET socketWithClient;
-	SOCKET socketWithIsp;
-	struct sockaddr_in serverAddr;
-	struct sockaddr_in clientAddr;
-	int clientAddrLen = sizeof(clientAddr);
-	char frame[MAX_FRAME_SIZE] = { 0 };
-
-
+	clientAddrLen = sizeof(clientAddr);
+	ispAddrLen = sizeof(ispAddr);
 	//配置socket的启动项
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-				perror("WSAStartup failed");
-				return 1;
-			}
+		perror("WSAStartup failed");
+		return 1;
+	}
+
+
+	{
+		//用户的地址需要每次接收到后设置
+	}
+
+	{// dns服务提供商 地址配置
+		ispAddr.sin_family = AF_INET;//使用ipv4的协议族
+		ispAddr.sin_addr.s_addr =  INADDR_ANY; //，我想要改为和特定ip通信的socket地址，这个ip是10.3.9.45将本地计算机的所有ip都和这个socket绑定
+		ispAddr.sin_port = htons(PORT_WITH_ISP);//dns服务提供商的端口配置
+
+	}
+
+	{//   dns上级服务提供商的socket的配置
+		programeAddrToIsp.sin_family = AF_INET;//使用ipv4的协议族
+		programeAddrToIsp.sin_addr.s_addr = INADDR_ANY;//将本地计算机的所有ip都和这个socket绑定
+		programeAddrToIsp.sin_port = htons(PORT_WITH_ISP);//端口配置
+		socketWithIsp = socket(AF_INET, SOCK_DGRAM, 0);
+		if (socketWithIsp == INVALID_SOCKET) {
+			perror("socket creation failed");
+			exit(1);
+		}
+
+
+		if (bind(socketWithIsp, (struct sockaddr*)&programeAddrToIsp, sizeof(programeAddrToIsp)) < 0) {
+			perror("bind failed");
+			exit(1);
+		}
+
+		printf(" dns conected with ISP server listening on port %d...\n", PORT_WITH_ISP);
+	}
 
 
 
+	{//  这个程序对于客户的socket 地址配置
+		programeAddrToClient.sin_family = AF_INET;//使用ipv4的协议族
+		programeAddrToClient.sin_addr.s_addr = INADDR_ANY;//将本地计算机的所有ip都和这个socket绑定
+		programeAddrToClient.sin_port = htons(PORT);//这个dns本地服务器的端口为PORT
 
-	{//配置socketWithClient
 		socketWithClient = socket(AF_INET, SOCK_DGRAM, 0);
 		if (socketWithClient == INVALID_SOCKET) {
 			perror("socket creation failed");
 			return 1;
 		}
 
-		serverAddr.sin_family = AF_INET;
-		serverAddr.sin_addr.s_addr = INADDR_ANY;
-		serverAddr.sin_port = htons(PORT);
 
-		if (bind(socketWithClient, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+		if (bind(socketWithClient, (struct sockaddr*)&programeAddrToClient, sizeof(programeAddrToClient)) < 0) {
 			perror("bind failed");
 			exit(1);
 		}
@@ -42,74 +79,23 @@ int main(void) {
 	}
 
 
-	{//配置socketWithIsp
-		socketWithClient = socket(AF_INET, SOCK_DGRAM, 0);
-		if (socketWithClient == INVALID_SOCKET) {
-			perror("socket creation failed");
-			return 1;
-		}
-
-		serverAddr.sin_family = AF_INET;
-		serverAddr.sin_addr.s_addr = INADDR_ANY;
-		serverAddr.sin_port = htons(WITH_ISP_PORT);
-
-		if (bind(socketWithClient, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
-			perror("bind failed");
-			exit(1);
-		}
-
-		printf(" dns conected with ISP server listening on port %d...\n", WITH_ISP_PORT);
-
-
-
-
-
-
-	}
-	
-
-
-
-
-
-
-
-
-
-	//dns服务器主体
-	while (1) {
-		int frameSize = recvfrom(socketWithClient, frame, sizeof(frame), 0, (struct sockaddr*)&clientAddr, &clientAddrLen);	
-		if (frameSize < 0) {
-			perror("Error in recvfrom");
-			continue;
-		}
-		printCharToBinary(frame, frameSize);
-		char return_frame[MAX_FRAME_SIZE];
-		responseFrame* response = processFrame(frame, frameSize,return_frame);
-		if (response == NULL) {
-			if (sendto(socketWithClient, frame, frameSize, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
-				perror("Error in sendto");
-				continue;
-			}
-
-			
-			continue;
-		}
-		if (sendto(socketWithClient, response->frame, response->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
-			perror("Error in sendto");
-			exit(EXIT_FAILURE);
-		}
-		printf("-----------------------------------------------------------------------------------\n");
+	//client_server_part
+	int thread_id = 1;
+	int result = pthread_create(&thread_id, NULL, clientServerPart, NULL);
+	if (result != 0) {
+		printf("无法创建线程，错误码：%d\n", result);
+		return 1;
 	}
 
 
+	//ISP_server_part
+	int thread_id1 = 2;
+	result = pthread_create(&thread_id1, NULL, clientServerPart, NULL);
+	if (result != 0) {
+		printf("无法创建线程，错误码：%d\n", result);
+		return 1;
+	}
+	while(1){}
 
-
-
-
-	close(socketWithClient);
-	return 1;
-
-	
 
 }

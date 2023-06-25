@@ -1,5 +1,4 @@
  #include"head.h"
-extern database db;
 
 //×Ö·û×éÇåÁã
 void toZero(char* s) {
@@ -47,7 +46,7 @@ void writeIntoTxt(const char path[]) {
 }
 
 
-int search(char domain[],char ip[]) {
+int searchIp(char domain[],char ip[]) {
 
 }
 

@@ -24,6 +24,15 @@
     <ClCompile Include="processFrame.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="databaseFunction.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clientServerPart.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IspServerPart.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util.h">
@@ -35,7 +44,10 @@
     <ClInclude Include="config.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="struct.h">
+    <ClInclude Include="database.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="head.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
