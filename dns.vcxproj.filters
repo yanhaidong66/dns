@@ -50,10 +50,27 @@
     <ClInclude Include="head.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="pthread\include\need_errno.h">
+      <Filter>资源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pthread\include\pthread.h">
+      <Filter>资源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pthread\include\sched.h">
+      <Filter>资源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pthread\include\semaphore.h">
+      <Filter>资源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\dnsrelay.txt">
       <Filter>资源文件</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pthread\lib\v110\x64\Debug\static\cdecl\libpthread-static.lib">
+      <Filter>资源文件</Filter>
+    </Library>
   </ItemGroup>
 </Project>

@@ -95,6 +95,8 @@ int main(void) {
 		printf("无法创建线程，错误码：%d\n", result);
 		return 1;
 	}
+
+
 	while(1){}
 
 

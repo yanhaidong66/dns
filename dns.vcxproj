@@ -142,10 +142,17 @@
     <ClInclude Include="database.h" />
     <ClInclude Include="head.h" />
     <ClInclude Include="processFrame.h" />
+    <ClInclude Include="pthread\include\need_errno.h" />
+    <ClInclude Include="pthread\include\pthread.h" />
+    <ClInclude Include="pthread\include\sched.h" />
+    <ClInclude Include="pthread\include\semaphore.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\dnsrelay.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pthread\lib\v110\x64\Debug\static\cdecl\libpthread-static.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
