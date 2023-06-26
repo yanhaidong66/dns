@@ -9,7 +9,7 @@
 #include"processFrame.h"
 #include"util.h"
 void* clientServerPart();
-void* IspServerPart();
+void* ispServerPart();
 
 //数据结构部分
 
@@ -55,6 +55,11 @@ typedef struct response {
 }responseFrame;
 
 
+typedef struct myId {
+	char frameId[2];
+	struct sockaddr_in addr;
+}myId;
+
 //全局变量区
 extern database db;
 extern int clientId_frameId[MAX_CLIENT][MAX_FRAME_FORWARD] ;
@@ -64,8 +69,9 @@ extern struct sockaddr_in ispAddr;	//因特网DNS提供商的地址
 extern struct sockaddr_in clientAddr;	//给这个程序发送请求的客户端的地址
 extern struct sockaddr_in programeAddrToIsp;	//对于因特网DNS服务提供商，这个程序的地址
 extern struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
-extern int clientAddrLen ;
-extern int ispAddrLen ;
+extern int clientAddrLen ;	//用户地址长度
+extern int ispAddrLen ;		//isp的地址长度
+extern myId  id[MAX_CONVER_FRAME_SIZE];		//现在正在向上级dns转发的帧的自定义id结构
 
 
 

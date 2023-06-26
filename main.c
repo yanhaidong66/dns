@@ -11,7 +11,7 @@ struct sockaddr_in programeAddrToIsp;	//对于因特网DNS服务提供商，这个程序的地址
 struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
 int clientAddrLen ;
 int ispAddrLen;
-
+myId id[MAX_CONVER_FRAME_SIZE];		////现在正在向上级dns转发的帧的自定义id数组
 
 int main(void) {
 	readFromTxt("dnsrelay.txt");
@@ -31,7 +31,7 @@ int main(void) {
 
 	{// dns服务提供商 地址配置
 		ispAddr.sin_family = AF_INET;//使用ipv4的协议族
-		ispAddr.sin_addr.s_addr =  INADDR_ANY; //，我想要改为和特定ip通信的socket地址，这个ip是10.3.9.45将本地计算机的所有ip都和这个socket绑定
+		inet_pton(AF_INET, ISPADDR, &(ispAddr.sin_addr.s_addr));//我想要改为和特定ip通信的socket地址，这个ip是10.3.9.45将本地计算机的所有ip都和这个socket绑定
 		ispAddr.sin_port = htons(PORT_WITH_ISP);//dns服务提供商的端口配置
 
 	}
@@ -90,7 +90,7 @@ int main(void) {
 
 	//ISP_server_part
 	int thread_id1 = 2;
-	result = pthread_create(&thread_id1, NULL, clientServerPart, NULL);
+	result = pthread_create(&thread_id1, NULL, ispServerPart, NULL);
 	if (result != 0) {
 		printf("无法创建线程，错误码：%d\n", result);
 		return 1;

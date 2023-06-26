@@ -42,6 +42,22 @@ void strCopy(char destance[], char source[]) {
 }
 
 
+int stringToInt(char* s) {
+    int t = 0;
+    int r = 0;
+    while (s[t]!='\0') {
+        t++;
+    }
+    for (int i = t-1; i >= 0; i--) {
+        int a = s[i];
+        for (int j = i; j >= 0; j--) {
+            a *= 10;
+        }
+        r += a;
+    }
+    return r;
+}
+
 
 
 
