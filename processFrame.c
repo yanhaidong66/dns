@@ -19,9 +19,6 @@ void getDomain(char frame[], char domain[]) {
 
 }
 
-void getIp(char domain[], char ip[]) {
-
-}
 
 void getId(char* frame, unsigned char* id) {
 	printf("\nid:");
@@ -252,7 +249,6 @@ responseFrame* processFrame(char frame[], int frameSize) {
 
 	//如果查找到ip
 	if (searchIp(rf->domain, rf->ip)==1) {
-		getIp(frame, rf->ip);
 		makeRespnseFrame(rpf,*rf);
 		free(rf);
 		return rpf;
