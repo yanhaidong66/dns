@@ -12,6 +12,8 @@ struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
 int clientAddrLen ;
 int ispAddrLen;
 myId id[MAX_CONVER_FRAME_SIZE];		////现在正在向上级dns转发的帧的自定义id数组
+pthread_mutex_t mutex_id=PTHREAD_MUTEX_INITIALIZER;		//互斥锁
+
 
 int main(void) {
 	readFromTxt("dnsrelay.txt");
@@ -80,7 +82,7 @@ int main(void) {
 
 
 	//client_server_part
-	int thread_id = 1;
+	pthread_t thread_id;
 	int result = pthread_create(&thread_id, NULL, clientServerPart, NULL);
 	if (result != 0) {
 		printf("无法创建线程，错误码：%d\n", result);
@@ -89,15 +91,18 @@ int main(void) {
 
 
 	//ISP_server_part
-	int thread_id1 = 2;
+	pthread_t thread_id1;
 	result = pthread_create(&thread_id1, NULL, ispServerPart, NULL);
 	if (result != 0) {
 		printf("无法创建线程，错误码：%d\n", result);
 		return 1;
 	}
 
+	pthread_join(thread_id, NULL);
+	pthread_join(thread_id1, NULL);
 
-	while(1){}
+
+	
 
 
 }

@@ -18,17 +18,22 @@ void* ispServerPart() {
 		//将dns上级服务器的相应帧存入数据库
 		addIpAndDomain(rf->domain, rf->ip);
 
+
+
+		//id上锁
+		pthread_mutex_lock(&mutex_id);
 		//确定发送给哪个用户
 		struct sockaddr_in converClientAddr;	//转发的客户对象的地址
 		int clientId = 0;
 		clientId = (rf->id[0] >> 4) * 16 * 16 * 16 + (rf->id[0] & 0b00001111) * 16 * 16 + (rf->id[1] >> 4) * 16 + (rf->id[1] & 0b00001111);
 
-
+		
 		//通过ispSocket向用户发送
 		if (sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*)&id[clientId].addr, clientAddrLen) < 0) {
 			perror("Error in sendto");
 			exit(EXIT_FAILURE);
 		}
+		pthread_mutex_unlock(&mutex_id);
 
 
 	}

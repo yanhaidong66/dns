@@ -72,6 +72,7 @@ extern struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
 extern int clientAddrLen ;	//用户地址长度
 extern int ispAddrLen ;		//isp的地址长度
 extern myId  id[MAX_CONVER_FRAME_SIZE];		//现在正在向上级dns转发的帧的自定义id结构
+extern pthread_mutex_t mutex_id;		//id的互斥锁
 
 
 

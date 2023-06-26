@@ -24,6 +24,8 @@ void* clientServerPart() {
 
 		//在db中查找请求的域名对应的ip,如果没找到向isp发送查询
 		if (rpf->frame==NULL) {
+			//id上锁
+			pthread_mutex_lock(&mutex_id);
 			//将这个帧的id和ip转换为自定义的id
 			frameCopy(id[id_p].frameId, rf->id, 2);
 			frameCopy(&id[id_p].addr, &clientAddr, clientAddrLen);
@@ -31,6 +33,7 @@ void* clientServerPart() {
 
 			if (id_p >= MAX_CONVER_FRAME_SIZE)
 				id_p %= MAX_CONVER_FRAME_SIZE;
+			pthread_mutex_unlock(&mutex_id);
 
 			//通过和ISP连接的socket向ISP转发查询请求
 			if (sendto(socketWithIsp, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&ispAddr, ispAddrLen) < 0) {

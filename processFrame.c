@@ -1,7 +1,22 @@
 #include"head.h"
 
 void getDomain(char frame[], char domain[]) {
-	
+	char* ptr = &frame[13];//指向frame的指针，挨个读取内容
+
+	int k = 0;//q中的一个domain的字符位置
+	for (; (*ptr) != '\0'; ptr++) {
+
+		if ((*ptr) < 30) {
+			domain[k] = '.';
+			k++;
+		}
+		else {
+			domain[k] = *ptr;
+			k++;
+		}
+	}
+	printf("domain:%s\n",domain);
+
 }
 
 void getIp(char domain[], char ip[]) {
@@ -113,7 +128,7 @@ void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 	
 
 		int k = 0;//q中的一个domain的字符位置
-		printf("query:\n");
+		printf("\nquery:\n");
 		for (;(*ptr)!='\0'; ptr++) {
 			
 			if ((*ptr) < 30) {
@@ -141,24 +156,30 @@ void getQueries(char* frame,int frameSize,int queriesCount,query* q) {
 
 //制作回应帧，要求改变flags位（qr：改为0，回应报文,ra：改为1，dns服务器可用递归）和answer rrs位为1.query部分不需要改变，在query最后添加answer rrs
 int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
+	printf("responseFrame:\n");
 	frameCopy(rpf->frame, rf.frame, rf.sizeOfFrame);
 	//将qr改为1，标志为回应报文
 	char qr = rpf->frame[2];
 	qr = qr | 0b10000000;
 	rpf->frame[2] = qr;
-
+	printf("qr:");
+	printBinary(qr);
 
 
 	//将ra改为1，服务器可用递归查询
 	char ra = rpf->frame[3];
 	ra = ra | 0b10000000;
 	rpf->frame[3] = ra;
+	printf("\nra:");
+	printBinary(ra);
 
 
 	//将answer rrs数设置为1
 	char answerCount= rpf->frame[7];
 	answerCount = 1;
 	rpf->frame[7] = answerCount;
+	printf("\nanswerCount:");
+	printBinary(answerCount);
 
 	//制作answer rrs部分
 	char answer[32];
@@ -172,20 +193,19 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 	answer[4]=0;
 	answer[5]=1;
 	//设置time to live，回答在客户电脑中存放多长时间
-	answer[6];
-	answer[7];
-	answer[8];
-	answer[9];
+	answer[6]=1;
+	answer[7]=1;
+	answer[8]=1;
+	answer[9]=1;
 	//rrs内容的字节数（也就是ip地址的长度，为4）
 	answer[10]=0;
 	answer[11]=4;
 	//设置ip地址,将字符串ip转换为4个每个8位都用来存储的char
 	char ip[MAX_LEN_IP] = { 0 };
 	strCopy(ip, rf.ip[0]);
-	for (int i = 12; i < 16; i++) {
-		
-
-	}
+	inet_pton(AF_INET, ip, &answer[12]);
+	printf("\nanswer:");
+	printCharToBinary(answer,32);
 	
 
 
@@ -222,7 +242,6 @@ responseFrame* processFrame(char frame[], int frameSize) {
 	getRa(frame, &rf->ra);
 	getRcode(frame, &rf->rcode);
 	getDomain(frame,rf->domain);
-	getIp(frame, rf->ip);
 	getQueryCount(frame,&rf->questionCount);
 	getAnswerCount(frame, &rf->answerCount);
 	getAuthorityCount(frame, &rf->authorityCount);
@@ -231,6 +250,7 @@ responseFrame* processFrame(char frame[], int frameSize) {
 
 	//如果查找到ip
 	if (searchIp(rf->domain[0], rf->ip[0])==1) {
+		getIp(frame, rf->ip);
 		makeRespnseFrame(rpf,*rf);
 		free(rf);
 		return rpf;
