@@ -202,10 +202,12 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 	answer[11]=4;
 	//设置ip地址,将字符串ip转换为4个每个8位都用来存储的char
 	char ip[MAX_LEN_IP] = { 0 };
-	strCopy(ip, rf.ip[0]);
+	strCopy(ip, rf.ip);
 	inet_pton(AF_INET, ip, &answer[12]);
+	printf("\nquery:");
+	printCharToBinary(rf.frame, rf.sizeOfFrame);
 	printf("\nanswer:");
-	printCharToBinary(answer,32);
+	printCharToBinary(answer,16);
 	
 
 

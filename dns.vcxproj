@@ -149,10 +149,10 @@
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\dnsrelay.txt" />
+    <Library Include="pthread\lib\v110\x64\Debug\static\cdecl\libpthread-static.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="pthread\lib\v110\x64\Debug\static\cdecl\libpthread-static.lib" />
+    <Text Include="dnsrelay.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
