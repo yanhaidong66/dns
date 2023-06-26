@@ -249,7 +249,7 @@ responseFrame* processFrame(char frame[], int frameSize) {
 	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
 
 	//如果查找到ip
-	if (searchIp(rf->domain[0], rf->ip[0])==1) {
+	if (searchIp(rf->domain, rf->ip)==1) {
 		getIp(frame, rf->ip);
 		makeRespnseFrame(rpf,*rf);
 		free(rf);

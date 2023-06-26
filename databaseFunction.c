@@ -1,4 +1,5 @@
- #include"head.h"
+#include"head.h"
+extern database db;
 
 //字符组清零
 void toZero(char* s) {
@@ -30,26 +31,41 @@ void readFromTxt(const char path[]) {
 
     // 读取文件内容
     char line[500];
-    fgets(line, sizeof(line), file);
-    for (int i = 0; fgets(line, sizeof(line), file) != NULL; i++) {
+    int i = 0;
+    for (i = 0; fgets(line, sizeof(line), file) != NULL; i++) {
+
         lineToIpAndDomain(line, db.ip[i], db.domain[i]);
-        toZero(line);
         printf("%d:%s\n%s\n", i, db.ip[i], db.domain[i]);
+        toZero(line);
+        db.size = i;
     }
 
-
+    db.nowSize = db.size;
     fclose(file); // 关闭文件
 }
 
-void writeIntoTxt(const char path[]) {
 
+
+int searchIp(char domain[], char ip[]) {
+
+    for (int i = 0; MAX_DATABSE_IP_COUNT > i; i++) {//逐行查找数据库中与domain匹配的IP
+        if (!strcmp(db.domain[i], domain)) {
+            strcpy(ip, db.ip[i]);
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
-
-int searchIp(char domain[],char ip[]) {
-
-}
-
+//从全局变量database中插入一条ip和domain的内容，如果添加成功返回1，失败0，如果cache已满，则替换最旧内容
 int addIpAndDomain(char domain[], char ip[]) {
+    if (MAX_DATABSE_IP_COUNT > db.nowSize) {
+        strcpy(db.ip[db.nowSize], ip);
+        strcpy(db.domain[db.nowSize], domain);
+        return 1;
+    }
+
+    return 0;
 
 }
