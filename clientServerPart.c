@@ -6,10 +6,10 @@ void* clientServerPart() {
 	int id_p = 1;
 
 	while (1) {
-		responseFrame respf = { 0 };
-		responseFrame* rpf = &respf;//给用户的回应帧
-		requestionFrame requf = { 0 };
-		requestionFrame* rf = &requf;//用户发来的请求帧
+		responseFrame _rpf = { 0 };
+		requestionFrame _rf = { 0 };
+		responseFrame* rpf = &_rpf;//给用户的回应帧
+		requestionFrame* rf = &_rf;//用户发来的请求帧
 
 		
 		//接收用户发来的请求帧
@@ -59,6 +59,7 @@ void* clientServerPart() {
 			}
 
 		}
+		
 		
 	}
 

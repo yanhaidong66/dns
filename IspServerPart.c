@@ -9,7 +9,7 @@ void* ispServerPart() {
 	while (1) {
 		responseFrame respf = { 0 };
 		responseFrame* rpf = &respf;//给用户的回应帧
-		struct sockaddr_in recvAddr;
+		struct sockaddr_in recvAddr = { 0 };
 		int recvAddrLen=sizeof(recvAddr);
 		rpf->sizeOfFrame = recvfrom(socketWithIsp, rpf->frame, sizeof(rpf->frame), 0, (struct socketaddr*)&recvAddr, &recvAddrLen);
 		if (rpf->sizeOfFrame <= 0) {
@@ -35,9 +35,7 @@ void* ispServerPart() {
 		int r = 0;
 
  		if ((r=sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*) &(id[clientId].addr), cSize)) < 0) {
-			perror("Error in sendto");
-			printf("%d", r);
-			exit(EXIT_FAILURE);
+			perror("Error in sendto to isp\n");
 		}
 		pthread_mutex_unlock(&mutex_id);
 		
