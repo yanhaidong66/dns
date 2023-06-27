@@ -58,6 +58,21 @@ int stringToInt(char* s) {
     return r;
 }
 
+int intToCharArray(char* arr, int num) {
+    // 将整数转换为字符串
+    char temp[12]; // 最大支持12位整数，包括符号和结尾的空字符
+    int length = snprintf(temp, sizeof(temp), "%d", num);
+
+    // 将字符串复制到字符数组中
+    int i;
+    for (i = 0; i < length; i++) {
+        arr[i] = temp[i];
+    }
+    arr[length] = '\0'; // 在数组末尾添加空字符
+
+    return length;
+}
+
 
 
 

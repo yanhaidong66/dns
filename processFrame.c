@@ -206,7 +206,8 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 	//printf("\nanswer:");
 	//printCharToBinary(answer,16);
 	
-
+	strCopy(rpf->domain, rf.domain);
+	strCopy(rpf->ip, rf.ip);
 
 	//将answer rrs添加到query末尾
 	frameCopy(&rpf->frame[rf.sizeOfFrame], answer, 16);
@@ -227,9 +228,7 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 
 
 //传入的是frame的char为流的8位
-responseFrame* processFrame(char frame[], int frameSize) {
-	requestionFrame* rf=(requestionFrame*)calloc(sizeof(requestionFrame),1);
-	responseFrame* rpf = (responseFrame*)calloc(sizeof(responseFrame), 1);
+ int processFrame(char frame[], int frameSize,responseFrame* rpf,requestionFrame* rf) {
 	frameCopy(rf->frame, frame, frameSize);
 	rf->sizeOfFrame = frameSize;
 	getId(frame, rf->id);
@@ -250,12 +249,52 @@ responseFrame* processFrame(char frame[], int frameSize) {
 	//如果查找到ip
 	if (searchIp(rf->domain, rf->ip)==1) {
 		makeRespnseFrame(rpf,*rf);
-		free(rf);
-		return rpf;
+		return 1;
 	}
 	//查不到ip
 	else {
-		return NULL;
+		strCopy(rpf->domain, rf->domain);
+		strCopy(rpf->ip, rf->ip);
+		return 0;
 	}
 
 }
+
+ int getIpAndDomainFromFrame(responseFrame* rpf, int sizeOfFrame) {
+	 int ip[4] = { 0 }; 
+	 int len = 0;
+	 ip[0] = (int)rpf->frame[44];
+	 ip[1] = (int)rpf->frame[45];
+	 ip[2] = (int)rpf->frame[46];
+	 ip[3] = (int)rpf->frame[47];
+	 len += intToCharArray(rpf->ip, ip[0]);
+	 rpf->ip[len] = '.';
+	 len++;
+	 len += intToCharArray((rpf->ip)+len, ip[1]);
+	 rpf->ip[len] = '.';
+	 len++;
+	 len += intToCharArray((rpf->ip) + len, ip[2]);
+	 rpf->ip[len] = '.';
+	 len++;
+	 len += intToCharArray((rpf->ip) + len, ip[3]);
+
+	 char* ptr = & (rpf->frame[13]);//指向frame的指针，挨个读取内容
+
+
+	 int k = 0;//q中的一个domain的字符位置
+	 for (; (*ptr) != '\0'; ptr++) {
+
+		 if ((*ptr) < 30) {
+			 rpf->domain[k] = '.';
+			 k++;
+		 }
+		 else {
+			 rpf->domain[k] = *ptr;
+			 k++;
+		 }
+	 }
+	 printf(":::::::::%s", rpf->domain);
+
+	 return 1;
+
+ }

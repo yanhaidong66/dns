@@ -52,6 +52,9 @@ typedef struct requestion
 typedef struct response {
 	char frame[MAX_FRAME_SIZE];
 	int sizeOfFrame;
+	unsigned char ip[MAX_LEN_IP];
+	char domain[MAX_LEN_DOMAIN];
+	unsigned char id[5];
 
 }responseFrame;
 

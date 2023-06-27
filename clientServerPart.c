@@ -6,8 +6,10 @@ void* clientServerPart() {
 	int id_p = 1;
 
 	while (1) {
-		responseFrame* rpf;//给用户的回应帧
-		requestionFrame* rf = (requestionFrame*)calloc(sizeof(requestionFrame), 1);//用户发来的请求帧
+		responseFrame respf = { 0 };
+		responseFrame* rpf = &respf;//给用户的回应帧
+		requestionFrame requf = { 0 };
+		requestionFrame* rf = &requf;//用户发来的请求帧
 
 		
 		//接收用户发来的请求帧
@@ -18,17 +20,17 @@ void* clientServerPart() {
 
 
 		//处理用户的请求帧
-		rpf = processFrame(rf->frame, rf->sizeOfFrame);
+		int result= processFrame(rf->frame, rf->sizeOfFrame,rf,rpf);
 
 
 
 		//在db中查找请求的域名对应的ip,如果没找到向isp发送查询
-		if (rpf->frame==NULL) {
+		if (result==0) {
 			//id上锁
 			pthread_mutex_lock(&mutex_id);
 			//将这个帧的id和ip存储到全局变量id结构数组中
 			frameCopy(id[id_p].frameId, rf->frame, 2);
-			frameCopy(&id[id_p].addr, &clientAddr, clientAddrLen);
+			frameCopy(&id[id_p].addr, &clientAddr, clientAddrLen); 
 			//将这个帧的dns部分id转换为自定义的id_p
 			rf->frame[0] = (char)((0b1111111100000000&id_p)>>8);
 			rf->frame[1] = (char)(0b11111111&id_p);
@@ -57,7 +59,7 @@ void* clientServerPart() {
 			}
 
 		}
-		free(rpf);
+		
 	}
 
 

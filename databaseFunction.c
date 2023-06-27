@@ -66,25 +66,27 @@ int searchIp(char domain[], char ip[]) {
 
 //从全局变量database中插入一条ip和domain的内容，如果添加成功返回1，失败0，如果cache已满，则替换最旧内容
 int addIpAndDomain(char domain[], char ip[]) {
-    int count = 0;
 
     if (MAX_DATABSE_IP_COUNT - 1 > db.nowSize) {
-        for (int i = db.nowSize; i > db.size; i--) {
-            strcpy(ip[i + 1], ip[i]);
-            strcpy(domain[i + 1], domain[i]);
+        for (int i = db.nowSize; i > db.size + 1; i--) {
+            strcpy(db.ip[i], db.ip[i - 1]);
+            strcpy(db.domain[i], db.domain[i - 1]);
         }
         db.nowSize++;
-        strcpy(ip[db.size], ip);
-        strcpy(domain[db.size], domain);
+        strcpy(db.ip[db.size], ip);
+        strcpy(db.domain[db.size], domain);
+        return 1;
 
     }
     else {
         for (int i = MAX_DATABSE_IP_COUNT - 1; i > db.size; i--) {
-            strcpy(ip[i], ip[i - 1]);
-            strcpy(domain[i], domain[i - 1]);
+            strcpy(db.ip[i], db.ip[i - 1]);
+            strcpy(db.domain[i], db.domain[i - 1]);
         }
-        strcpy(ip[db.size], ip);
-        strcpy(domain[db.size], domain);
+        strcpy(db.ip[db.size], ip);
+        strcpy(db.domain[db.size], domain);
+        return 1;
     }
 
+    return 0;
 }
