@@ -12,7 +12,7 @@ void* clientServerPart() {
 		//接收用户发来的请求帧
 		rf->sizeOfFrame = recvfrom(socketWithClient, rf->frame, sizeof(rf->frame), 0, (struct socketaddr*)&clientAddr, &clientAddrLen);
 		if (rf->sizeOfFrame < 0) {
-			perror("Error in recvfrom");
+			perror("recv from client: Error in recvfrom");
 			continue;
 		}
 
@@ -37,13 +37,14 @@ void* clientServerPart() {
 			printCharToBinary(rf->frame, rf->sizeOfFrame);
 			printf("\n");
 
- 			if (id_p >= MAX_CONVER_FRAME_SIZE)
+ 			if (id_p >= MAX_CONVER_FRAME_SIZE-2)
 				id_p %= MAX_CONVER_FRAME_SIZE;
 			pthread_mutex_unlock(&mutex_id);
 
 			//通过和ISP连接的socket向ISP转发查询请求
-			if (sendto(socketWithIsp, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&ispAddr, ispAddrLen) < 0) {
-				perror("Error in sendto");
+			int r = 0;
+			if ((r=sendto(socketWithIsp, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&ispAddr, ispAddrLen)) < 0) {
+				printf("socket send conver frame to ISP :Error in sendto %d",r);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -51,7 +52,7 @@ void* clientServerPart() {
 		//如果找到了向用户返回帧
 		else {
 			if (sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
-				perror("Error in sendto");
+				perror("send to client : Error in sendto");
 				exit(EXIT_FAILURE);
 			}
 

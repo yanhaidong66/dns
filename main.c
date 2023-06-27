@@ -80,6 +80,7 @@ int main(void) {
 
 	}
 
+	
 
 	//client_server_part
 	pthread_t thread_id;
@@ -91,12 +92,12 @@ int main(void) {
 
 
 	//ISP_server_part
-	pthread_t thread_id1;
-	result = pthread_create(&thread_id1, NULL, ispServerPart, NULL);
-	if (result != 0) {
-		printf("无法创建线程，错误码：%d\n", result);
-		return 1;
-	}
+		pthread_t thread_id1;
+		int result1 = pthread_create(&thread_id1, NULL, ispServerPart, NULL);
+		if (result1 != 0) {
+			printf("无法创建线程，错误码：%d\n", result1);
+			return 1;
+		}
 
 	pthread_join(thread_id, NULL);
 	pthread_join(thread_id1, NULL);

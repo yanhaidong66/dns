@@ -8,8 +8,10 @@ void* ispServerPart() {
 				
 
 	while (1) {
-		rf->sizeOfFrame = recvfrom(socketWithIsp, rf->frame, sizeof(rf->frame), 0, (struct socketaddr*)&ispAddr, &ispAddrLen);
-		if (rpf->sizeOfFrame < 0) {
+		struct sockaddr_in recvAddr;
+		int recvAddrLen=0;
+		rf->sizeOfFrame = recvfrom(socketWithIsp, rf->frame, sizeof(rf->frame), 0, (struct socketaddr*)&recvAddr, &recvAddrLen);
+		if (rf->sizeOfFrame < 0) {
 			perror("Error in recvfrom");
 			continue;
 		}
@@ -26,7 +28,7 @@ void* ispServerPart() {
 		struct sockaddr_in converClientAddr;	//转发的客户对象的地址
 		int clientId = 0;
 		clientId = (rf->id[0] >> 4) * 16 * 16 * 16 + (rf->id[0] & 0b00001111) * 16 * 16 + (rf->id[1] >> 4) * 16 + (rf->id[1] & 0b00001111);
-
+		printf("\nclient_myId:%d",clientId);
 		
 		//通过ispSocket向用户发送
 		if (sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*)&id[clientId].addr, clientAddrLen) < 0) {
