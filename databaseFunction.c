@@ -20,6 +20,7 @@ void lineToIpAndDomain(char line[], char ip[], char domain[]) {
     }
 }
 
+
 //从path中读取ip和domain存储到全局变量database db中
 void readFromTxt(const char path[]) {
     FILE* file = fopen(path, "r"); // 打开文件，以只读模式打开
@@ -37,10 +38,10 @@ void readFromTxt(const char path[]) {
         lineToIpAndDomain(line, db.ip[i], db.domain[i]);
         printf("%d:%s\n%s\n", i, db.ip[i], db.domain[i]);
         toZero(line);
-        db.size = i;
+        db.size = i + 1;
     }
 
-    db.nowSize = db.size;
+    db.nowSize = db.size + 1;
     fclose(file); // 关闭文件
 }
 
@@ -48,9 +49,12 @@ void readFromTxt(const char path[]) {
 
 int searchIp(char domain[], char ip[]) {
 
-    for (int i = 0; MAX_DATABSE_IP_COUNT > i; i++) {//逐行查找数据库中与domain匹配的IP
+    for (int i = 0; MAX_DATABSE_IP_COUNT > i; i++) {//逐行查找数据库中与domain匹配的IP,成功查找为1，同时被屏蔽的返回-1，查找失败返回0
         if (!strcmp(db.domain[i], domain)) {
             strcpy(ip, db.ip[i]);
+            if (!strcmp(ip, "0.0.0.0")) {
+                return -1;
+            }
             return 1;
         }
     }
@@ -58,14 +62,29 @@ int searchIp(char domain[], char ip[]) {
     return 0;
 }
 
+
+
 //从全局变量database中插入一条ip和domain的内容，如果添加成功返回1，失败0，如果cache已满，则替换最旧内容
 int addIpAndDomain(char domain[], char ip[]) {
-    if (MAX_DATABSE_IP_COUNT > db.nowSize) {
-        strcpy(db.ip[db.nowSize], ip);
-        strcpy(db.domain[db.nowSize], domain);
-        return 1;
-    }
+    int count = 0;
 
-    return 0;
+    if (MAX_DATABSE_IP_COUNT - 1 > db.nowSize) {
+        for (int i = db.nowSize; i > db.size; i--) {
+            strcpy(ip[i + 1], ip[i]);
+            strcpy(domain[i + 1], domain[i]);
+        }
+        db.nowSize++;
+        strcpy(ip[db.size], ip);
+        strcpy(domain[db.size], domain);
+
+    }
+    else {
+        for (int i = MAX_DATABSE_IP_COUNT - 1; i > db.size; i--) {
+            strcpy(ip[i], ip[i - 1]);
+            strcpy(domain[i], domain[i - 1]);
+        }
+        strcpy(ip[db.size], ip);
+        strcpy(domain[db.size], domain);
+    }
 
 }

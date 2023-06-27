@@ -6,10 +6,10 @@ int clientId_frameId[MAX_CLIENT][MAX_FRAME_FORWARD] ;//用户和没有在数据库找到的d
 SOCKET socketWithIsp;	//和因特网DNS服务商通信的socket
 SOCKET socketWithClient;	//和用户通信的socket
 struct sockaddr_in ispAddr;	//因特网DNS提供商的地址
-struct sockaddr_in clientAddr;	//给这个程序发送请求的客户端的地址
 struct sockaddr_in programeAddrToIsp;	//对于因特网DNS服务提供商，这个程序的地址
 struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
-int clientAddrLen ;
+struct sockaddr_in clientAddr;	//给这个程序发送请求的客户端的地址
+int clientAddrLen;
 int ispAddrLen;
 myId id[MAX_CONVER_FRAME_SIZE];		////现在正在向上级dns转发的帧的自定义id数组
 pthread_mutex_t mutex_id=PTHREAD_MUTEX_INITIALIZER;		//互斥锁
@@ -34,7 +34,7 @@ int main(void) {
 	{// dns服务提供商 地址配置
 		ispAddr.sin_family = AF_INET;//使用ipv4的协议族
 		inet_pton(AF_INET, ISPADDR, &(ispAddr.sin_addr.s_addr));//我想要改为和特定ip通信的socket地址，这个ip是10.3.9.45将本地计算机的所有ip都和这个socket绑定
-		ispAddr.sin_port = htons(PORT_WITH_ISP);//dns服务提供商的端口配置
+		ispAddr.sin_port = htons(PORT_ISP);//dns服务提供商的端口配置
 
 	}
 

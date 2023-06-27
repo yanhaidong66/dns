@@ -68,9 +68,9 @@ extern SOCKET socketWithIsp;	//和因特网DNS服务商通信的socket
 extern SOCKET socketWithClient;	//和用户通信的socket
 extern struct sockaddr_in ispAddr;	//因特网DNS提供商的地址
 extern struct sockaddr_in clientAddr;	//给这个程序发送请求的客户端的地址
+extern int clientAddrLen;
 extern struct sockaddr_in programeAddrToIsp;	//对于因特网DNS服务提供商，这个程序的地址
 extern struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
-extern int clientAddrLen ;	//用户地址长度
 extern int ispAddrLen ;		//isp的地址长度
 extern myId  id[MAX_CONVER_FRAME_SIZE];		//现在正在向上级dns转发的帧的自定义id结构
 extern pthread_mutex_t mutex_id;		//id的互斥锁

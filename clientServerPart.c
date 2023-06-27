@@ -8,11 +8,11 @@ void* clientServerPart() {
 	while (1) {
 		responseFrame* rpf;//给用户的回应帧
 		requestionFrame* rf = (requestionFrame*)calloc(sizeof(requestionFrame), 1);//用户发来的请求帧
+
 		
 		//接收用户发来的请求帧
 		rf->sizeOfFrame = recvfrom(socketWithClient, rf->frame, sizeof(rf->frame), 0, (struct socketaddr*)&clientAddr, &clientAddrLen);
-		if (rf->sizeOfFrame < 0) {
-			perror("recv from client: Error in recvfrom");
+		if (rf->sizeOfFrame <= 0) {
 			continue;
 		}
 
@@ -27,15 +27,15 @@ void* clientServerPart() {
 			//id上锁
 			pthread_mutex_lock(&mutex_id);
 			//将这个帧的id和ip存储到全局变量id结构数组中
-			frameCopy(id[id_p].frameId, rf->id, 2);
+			frameCopy(id[id_p].frameId, rf->frame, 2);
 			frameCopy(&id[id_p].addr, &clientAddr, clientAddrLen);
 			//将这个帧的dns部分id转换为自定义的id_p
 			rf->frame[0] = (char)((0b1111111100000000&id_p)>>8);
 			rf->frame[1] = (char)(0b11111111&id_p);
 			id_p++;
-			printf("\nconver frame:\n");
-			printCharToBinary(rf->frame, rf->sizeOfFrame);
-			printf("\n");
+			//printf("\nconver frame:\n");
+			//printCharToBinary(rf->frame, rf->sizeOfFrame);
+			
 
  			if (id_p >= MAX_CONVER_FRAME_SIZE-2)
 				id_p %= MAX_CONVER_FRAME_SIZE;
