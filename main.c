@@ -65,10 +65,10 @@ int main(int argc,char* argv[]) {
 		}
 
 		if (isIp(argv[3]) == 1) {
-			strcpy(arg.dnsIp, argv[2]);
+			strcpy(arg.dnsIp, argv[3]);
 		}
 		else {
-			strcpy(arg.txtPath, argv[2]);
+			strcpy(arg.txtPath, argv[3]);
 		}
 		
 	}
@@ -95,7 +95,7 @@ int main(int argc,char* argv[]) {
 
 	{// dns服务提供商 地址配置
 		ispAddr.sin_family = AF_INET;//使用ipv4的协议族
-		if (arg.level < 2) {
+		if (arg.dnsIp[0] == '\0') {
 			inet_pton(AF_INET, ISPADDR, &(ispAddr.sin_addr.s_addr));
 		}
 		else {
@@ -157,7 +157,7 @@ int main(int argc,char* argv[]) {
 			return 1;
 		}
 
-
+		Sleep(10);
 		//ISP_server_part
 		pthread_t thread_id1;
 		int result1 = pthread_create(&thread_id1, NULL, ispServerPart, NULL);

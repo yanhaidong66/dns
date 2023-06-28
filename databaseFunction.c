@@ -68,7 +68,7 @@ int searchIp(char domain[], char ip[]) {
 int addIpAndDomain(char domain[], char ip[]) {
 
     if (MAX_DATABSE_IP_COUNT - 1 > db.nowSize) {
-        for (int i = db.nowSize; i > db.size + 1; i--) {
+        for (int i = db.nowSize-1; i > db.size ; i--) {
             strcpy(db.ip[i], db.ip[i - 1]);
             strcpy(db.domain[i], db.domain[i - 1]);
         }

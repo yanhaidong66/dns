@@ -13,9 +13,9 @@ void* clientServerPart() {
 
 		
 		//接收用户发来的请求帧
-		pthread_mutex_lock(&mutex_socketWithClient);
+		
 		rf->sizeOfFrame = recvfrom(socketWithClient, rf->frame, sizeof(rf->frame), 0, (struct socketaddr*)&clientAddr, &clientAddrLen);
-		pthread_mutex_unlock(&mutex_socketWithClient);
+		
 		if (rf->sizeOfFrame <= 0) {
 			continue;
 		}
@@ -117,33 +117,33 @@ void* clientServerPart() {
 
 			//通过和ISP连接的socket向ISP转发查询请求
 			int r = 0;
-			pthread_mutex_lock(&mutex_socketWithIsp);
-			if ((r=sendto(socketWithIsp, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&ispAddr, ispAddrLen)) < 0) {
+			 
+			if ((r=sendto(socketWithIsp, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&ispAddr, sizeof(ispAddr))) < 0) {
 				printf("socket send conver frame to ISP :Error in sendto %d",r);
 				
 			}
-			pthread_mutex_unlock(&mutex_socketWithIsp);
+			
 		}
 		else if (result == -1) {
 			//将返回的rcode设置为3,返回为错误码
 			rf->frame[3] = rf->frame[3] | 0b00000111;
 			//将rq设置为1，表示为响应报文
 			rf->frame[2] = rf->frame[2] | 0b10000000;
-			pthread_mutex_lock(&mutex_socketWithClient);
-			if (sendto(socketWithClient, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
+			
+			if (sendto(socketWithClient, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, sizeof(clientAddr)) < 0) {
 				perror("send to client : Error in sendto");
 			}
-			pthread_mutex_unlock(&mutex_socketWithClient);
+			
 		}
 
 		//如果找到了向用户返回帧
 		else {
-			pthread_mutex_lock(&mutex_socketWithClient);
-			if (sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
+			
+			if (sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, sizeof(clientAddr)) < 0) {
 				perror("send to client : Error in sendto");
 				
 			}
-			pthread_mutex_unlock(&mutex_socketWithClient);
+			
 
 		}
 		

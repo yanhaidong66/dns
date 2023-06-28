@@ -86,8 +86,7 @@ extern myId  id[MAX_CONVER_FRAME_SIZE];		//现在正在向上级dns转发的帧的自定义id结
 extern pthread_mutex_t mutex_id;		//id的互斥锁
 extern pthread_mutex_t mutex_arg;		//main函数的参数互斥锁
 extern Argv arg;	//main的传入的参数
-extern pthread_mutex_t mutex_socketWithIsp ;	//和isp通信的socket的互斥锁
-extern pthread_mutex_t mutex_socketWithClient ; //和client通信的socket的互斥锁
+
 
 
 
