@@ -20,21 +20,21 @@ void* clientServerPart() {
 
 
 		//处理用户的请求帧
-		int result= processFrame(rf->frame, rf->sizeOfFrame,rf,rpf);
+		int result= processFrame(rf->frame, rf->sizeOfFrame,rpf,rf);
 
 		if (arg.level >= 1) {
-			pthread_mutex_lock(mutex_arg);
+			pthread_mutex_lock(&mutex_arg);
 			printf("\n--------------------------------------\n");
 			printf("client_id:");
-			printCharToBinary(rf->id,2);
-			printf("\nclient_ip:");
+			printCharToBinary(rf->id,4);
+			printf("client_ip:");
 			char clientIp[MAX_LEN_IP] = { 0 };
 			// 将clientAddr.sin_addr转换为字符串
 			inet_ntop(AF_INET, &(clientAddr.sin_addr), clientIp, sizeof(clientIp));
 			printf("%s", clientIp);
 			printf("\nsearch_domain:%s\n",rf->domain);
 			printf("--------------------------------------\n");
-			pthread_mutex_unlock(mutex_arg);
+			pthread_mutex_unlock(&mutex_arg);
 		}
 
 		//在db中查找请求的域名对应的ip,如果没找到向isp发送查询

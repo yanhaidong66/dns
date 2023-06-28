@@ -231,7 +231,7 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
  int processFrame(char frame[], int frameSize,responseFrame* rpf,requestionFrame* rf) {
 	frameCopy(rf->frame, frame, frameSize);
 	rf->sizeOfFrame = frameSize;
-	getId(frame, rf->id);
+ 	getId(frame, rf->id);
 	getQr(frame, &rf->qr);
 	getOpcode(frame, &rf->opcode);
 	getAa(frame, &rf->aa);

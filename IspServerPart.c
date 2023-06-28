@@ -16,7 +16,7 @@ void* ispServerPart() {
 			continue;
 		}
 		//printf("\nframe from superior :");
-		printCharToBinary(rpf->frame, rpf->sizeOfFrame);
+		//printCharToBinary(rpf->frame, rpf->sizeOfFrame);
 		getIpAndDomainFromFrame(rpf->frame, rpf->sizeOfFrame,rpf);
 
 		//将dns上级服务器的相应帧存入数据库

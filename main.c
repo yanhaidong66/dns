@@ -15,11 +15,20 @@ myId id[MAX_CONVER_FRAME_SIZE];		////现在正在向上级dns转发的帧的自定义id数组
 pthread_mutex_t mutex_id=PTHREAD_MUTEX_INITIALIZER;		//互斥锁
 pthread_mutex_t mutex_arg = PTHREAD_MUTEX_INITIALIZER;		//main函数的参数互斥锁
 Argv arg;	//main的传入的参数
-int main(int argc,char argv[]) {
-	if (argc == 1) {
-		arg.level = 0;
-	}
+int main(int argc,char* argv[]) {
+
+	//只传入文件名和输出级别
 	if (argc == 2) {
+		arg.count = argc;
+		if (strcmp("-d", argv[1]) == 0) {
+			arg.level = 1;
+		}
+		else if (strcmp("-dd", argv[1]) == 0) {
+			arg.level = 2;
+		}
+	}
+	//传入文件名，输出级别，和上级dns的ip地址
+	else if (argc == 3) {
 		arg.count = argc;
 		if (strcmp("-d", argv[1]) == 0) {
 			arg.level = 1;
@@ -30,7 +39,8 @@ int main(int argc,char argv[]) {
 		strcpy(arg.dnsIp, argv[2]);
 
 	}
-	else if (argc == 3) {
+	//传入文件名，输出级别，上级dns的ip地址，和改变的txt文件名字
+	else if (argc == 4) {
 		arg.count = argc;
 		if (strcmp("-d", argv[1]) == 0) {
 			arg.level = 1;
@@ -39,6 +49,7 @@ int main(int argc,char argv[]) {
 			arg.level = 2;
 		}
 		strcpy(arg.dnsIp, argv[2]);
+		printf("%s", arg.dnsIp);
 		strcpy(arg.txtPath, argv[3]);
 		
 	}
