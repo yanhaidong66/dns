@@ -13,9 +13,37 @@ int clientAddrLen;
 int ispAddrLen;
 myId id[MAX_CONVER_FRAME_SIZE];		////现在正在向上级dns转发的帧的自定义id数组
 pthread_mutex_t mutex_id=PTHREAD_MUTEX_INITIALIZER;		//互斥锁
+pthread_mutex_t mutex_arg = PTHREAD_MUTEX_INITIALIZER;		//main函数的参数互斥锁
+Argv arg;	//main的传入的参数
+int main(int argc,char argv[]) {
+	if (argc == 1) {
+		arg.level = 0;
+	}
+	if (argc == 2) {
+		arg.count = argc;
+		if (strcmp("-d", argv[1]) == 0) {
+			arg.level = 1;
+		}
+		else if (strcmp("-dd", argv[1]) == 0) {
+			arg.level = 2;
+		}
+		strcpy(arg.dnsIp, argv[2]);
 
+	}
+	else if (argc == 3) {
+		arg.count = argc;
+		if (strcmp("-d", argv[1]) == 0) {
+			arg.level = 1;
+		}
+		else if (strcmp("-dd", argv[1]) == 0) {
+			arg.level = 2;
+		}
+		strcpy(arg.dnsIp, argv[2]);
+		strcpy(arg.txtPath, argv[3]);
+		
+	}
+	
 
-int main(void) {
 	readFromTxt("dnsrelay.txt");
 	WSADATA wsaData;
 	clientAddrLen = sizeof(clientAddr);
@@ -54,7 +82,7 @@ int main(void) {
 			exit(1);
 		}
 
-		//printf(" dns conected with ISP server listening on port %d...\n", PORT_WITH_ISP);
+		printf(" dns conected with ISP server listening on port %d...\n", PORT_WITH_ISP);
 	}
 
 
@@ -76,31 +104,34 @@ int main(void) {
 			exit(1);
 		}
 
-		//printf(" dns conected with client server listening on port %d...\n", PORT);
+		printf(" dns conected with client server listening on port %d...\n", PORT);
 
 	}
 
 	
-
-	//client_server_part
-	pthread_t thread_id;
-	int result = pthread_create(&thread_id, NULL, clientServerPart, NULL);
-	if (result != 0) {
-		//printf("无法创建线程，错误码：%d\n", result);
-		return 1;
-	}
-
-
-	//ISP_server_part
-		pthread_t thread_id1;
-		int result1 = pthread_create(&thread_id1, NULL, ispServerPart, NULL);
-		if (result1 != 0) {
-			//printf("无法创建线程，错误码：%d\n", result1);
+	{
+		//client_server_part
+		pthread_t thread_id;
+		int result = pthread_create(&thread_id, NULL, clientServerPart, NULL);
+		if (result != 0) {
+			printf("无法创建线程，错误码：%d\n", result);
 			return 1;
 		}
 
-	pthread_join(thread_id, NULL);
-	pthread_join(thread_id1, NULL);
+
+		//ISP_server_part
+		pthread_t thread_id1;
+		int result1 = pthread_create(&thread_id1, NULL, ispServerPart, NULL);
+		if (result1 != 0) {
+			printf("无法创建线程，错误码：%d\n", result1);
+			return 1;
+		}
+
+		pthread_join(thread_id, NULL);
+		pthread_join(thread_id1, NULL);
+	}
+	
+	
 
 
 	

@@ -64,6 +64,13 @@ typedef struct myId {
 	struct sockaddr_in addr;
 }myId;
 
+typedef struct {
+	int count;
+	int level;//调试等级
+	char dnsIp[40];
+	char txtPath[100];
+}Argv;
+
 //全局变量区
 extern database db;
 extern int clientId_frameId[MAX_CLIENT][MAX_FRAME_FORWARD] ;
@@ -77,6 +84,8 @@ extern struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
 extern int ispAddrLen ;		//isp的地址长度
 extern myId  id[MAX_CONVER_FRAME_SIZE];		//现在正在向上级dns转发的帧的自定义id结构
 extern pthread_mutex_t mutex_id;		//id的互斥锁
+extern pthread_mutex_t mutex_arg = PTHREAD_MUTEX_INITIALIZER;		//main函数的参数互斥锁
+extern Argv arg;	//main的传入的参数
 
 
 
