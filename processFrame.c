@@ -245,12 +245,16 @@ int makeRespnseFrame(responseFrame* rpf,requestionFrame rf) {
 	getQueries(frame,frameSize, rf->questionCount, &rf->queries);
 
 	//如果查找到ip
-	if (searchIp(rf->domain, rf->ip)==1) {
+	int searchR = 0;
+	if ((searchR=searchIp(rf->domain, rf->ip))==1) {
 		makeRespnseFrame(rpf,*rf);
 		return 1;
 	}
 	//查不到ip
-	else {
+	else if (searchR == -1) {
+		return -1;
+	} 
+	else{
 		strCopy(rpf->domain, rf->domain);
 		strCopy(rpf->ip, rf->ip);
 		return 0;

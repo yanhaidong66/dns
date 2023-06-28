@@ -105,7 +105,7 @@ void* clientServerPart() {
 			rf->frame[0] = (char)((0b1111111100000000&id_p)>>8);
 			rf->frame[1] = (char)(0b11111111&id_p);
 			id_p++;
-			////printf("\nconver frame:\n");
+			//printf("\nconver frame:\n");
 			//printCharToBinary(rf->frame, rf->sizeOfFrame);
 			
 
@@ -116,8 +116,17 @@ void* clientServerPart() {
 			//通过和ISP连接的socket向ISP转发查询请求
 			int r = 0;
 			if ((r=sendto(socketWithIsp, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&ispAddr, ispAddrLen)) < 0) {
-				//printf("socket send conver frame to ISP :Error in sendto %d",r);
-				exit(EXIT_FAILURE);
+				printf("socket send conver frame to ISP :Error in sendto %d",r);
+				
+			}
+		}
+		else if (result == -1) {
+			//将返回的rcode设置为3,返回为错误码
+			rf->frame[3] = rf->frame[3] | 0b00000111;
+			//将rq设置为1，表示为响应报文
+			rf->frame[2] = rf->frame[2] | 0b10000000;
+			if (sendto(socketWithClient, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
+				perror("send to client : Error in sendto");
 			}
 		}
 
@@ -125,7 +134,7 @@ void* clientServerPart() {
 		else {
 			if (sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
 				perror("send to client : Error in sendto");
-				exit(EXIT_FAILURE);
+				
 			}
 
 		}
