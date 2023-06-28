@@ -4,7 +4,7 @@ void printCharToBinary(char* a, int length) {
     for (int i = 0; i < length; i++) {
         printBinary(a[i]);
     }
-    printf("\n");
+    //printf("\n");
 }
 
 
@@ -21,11 +21,11 @@ void printBinary(char hex) {
     c[2] = (c[2] & 0b100) >> 2;
     c[1] = (c[1] & 0b10) >> 1;
     c[0] = (c[0] & 0b1);
-    printf(" ");
+    //printf(" ");
     for (int i = 7; i >=0; i--) {
-        printf("%d", c[i]);
+        //printf("%d", c[i]);
     }
-    printf(" ");
+    //printf(" ");
 }
 
 

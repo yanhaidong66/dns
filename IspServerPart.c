@@ -15,7 +15,7 @@ void* ispServerPart() {
 		if (rpf->sizeOfFrame <= 0) {
 			continue;
 		}
-		printf("\nframe from superior :");
+		//printf("\nframe from superior :");
 		printCharToBinary(rpf->frame, rpf->sizeOfFrame);
 		getIpAndDomainFromFrame(rpf->frame, rpf->sizeOfFrame,rpf);
 

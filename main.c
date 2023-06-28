@@ -54,7 +54,7 @@ int main(void) {
 			exit(1);
 		}
 
-		printf(" dns conected with ISP server listening on port %d...\n", PORT_WITH_ISP);
+		//printf(" dns conected with ISP server listening on port %d...\n", PORT_WITH_ISP);
 	}
 
 
@@ -76,7 +76,7 @@ int main(void) {
 			exit(1);
 		}
 
-		printf(" dns conected with client server listening on port %d...\n", PORT);
+		//printf(" dns conected with client server listening on port %d...\n", PORT);
 
 	}
 
@@ -86,7 +86,7 @@ int main(void) {
 	pthread_t thread_id;
 	int result = pthread_create(&thread_id, NULL, clientServerPart, NULL);
 	if (result != 0) {
-		printf("无法创建线程，错误码：%d\n", result);
+		//printf("无法创建线程，错误码：%d\n", result);
 		return 1;
 	}
 
@@ -95,7 +95,7 @@ int main(void) {
 		pthread_t thread_id1;
 		int result1 = pthread_create(&thread_id1, NULL, ispServerPart, NULL);
 		if (result1 != 0) {
-			printf("无法创建线程，错误码：%d\n", result1);
+			//printf("无法创建线程，错误码：%d\n", result1);
 			return 1;
 		}
 

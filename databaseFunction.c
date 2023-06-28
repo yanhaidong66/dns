@@ -26,7 +26,7 @@ void readFromTxt(const char path[]) {
     FILE* file = fopen(path, "r"); // 打开文件，以只读模式打开
 
     if (file == NULL) {
-        printf("无法打开文件\n");
+        //printf("无法打开文件\n");
         exit(1);
     }
 
@@ -36,7 +36,7 @@ void readFromTxt(const char path[]) {
     for (i = 0; fgets(line, sizeof(line), file) != NULL; i++) {
 
         lineToIpAndDomain(line, db.ip[i], db.domain[i]);
-        printf("%d:%s\n%s\n", i, db.ip[i], db.domain[i]);
+        //printf("%d:%s\n%s\n", i, db.ip[i], db.domain[i]);
         toZero(line);
         db.size = i + 1;
     }
