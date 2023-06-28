@@ -17,7 +17,7 @@ pthread_mutex_t mutex_arg = PTHREAD_MUTEX_INITIALIZER;		//main函数的参数互斥锁
 Argv arg;	//main的传入的参数
 int main(int argc,char* argv[]) {
 
-	//只传入文件名和输出级别
+	//只传入文件名和输出级别,0为不输出，1为输出基础信息，2为输出全部信息
 	if (argc == 2) {
 		arg.count = argc;
 		if (strcmp("-d", argv[1]) == 0) {
@@ -36,7 +36,13 @@ int main(int argc,char* argv[]) {
 		else if (strcmp("-dd", argv[1]) == 0) {
 			arg.level = 2;
 		}
-		strcpy(arg.dnsIp, argv[2]);
+		if (isIp(argv[2]) == 1) {
+			strcpy(arg.dnsIp, argv[2]);
+		}
+		else {
+			strcpy(arg.txtPath, argv[2]);
+		}
+		
 
 	}
 	//传入文件名，输出级别，上级dns的ip地址，和改变的txt文件名字
@@ -48,12 +54,24 @@ int main(int argc,char* argv[]) {
 		else if (strcmp("-dd", argv[1]) == 0) {
 			arg.level = 2;
 		}
-		strcpy(arg.dnsIp, argv[2]);
-		strcpy(arg.txtPath, argv[3]);
+
+		if (isIp(argv[2]) == 1) {
+			strcpy(arg.dnsIp, argv[2]);
+		}
+		else {
+			strcpy(arg.txtPath, argv[2]);
+		}
+
+		if (isIp(argv[3]) == 1) {
+			strcpy(arg.dnsIp, argv[2]);
+		}
+		else {
+			strcpy(arg.txtPath, argv[2]);
+		}
 		
 	}
 	//设置读入的文件
-	if (arg.level != 4) {
+	if (arg.txtPath[0]=='\0') {
 		readFromTxt("dnsrelay.txt");
 	}
 	else
@@ -75,7 +93,7 @@ int main(int argc,char* argv[]) {
 
 	{// dns服务提供商 地址配置
 		ispAddr.sin_family = AF_INET;//使用ipv4的协议族
-		if (arg.level < 3) {
+		if (arg.level < 2) {
 			inet_pton(AF_INET, ISPADDR, &(ispAddr.sin_addr.s_addr));
 		}
 		else {

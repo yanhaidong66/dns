@@ -45,7 +45,7 @@ void strCopy(char destance[], char source[]) {
 int stringToInt(char* s) {
     int t = 0;
     int r = 0;
-    while (s[t]!='\0') {
+    while (s[t]!='\0'&&s[t]!='.') {
         t++;
     }
     for (int i = t-1; i >= 0; i--) {
@@ -73,9 +73,39 @@ int intToCharArray(char* arr, int num) {
     return length;
 }
 
+int stringToInt1(char* s,int len) {
+    int t = len;
+    int r = 0;
+    for (int i = 0; i < len; i++) {
+        r += s[i]-'0';
+        for (int j = len - i-1; j > 0; j--) {
+            r *= 10;
+        }
+    }
+    return r;
+}
 
+int isIp(char* ip) {
+    for (int i = 0; i < 3; i++,ip++) {
+        char len = 0;
+        while (ip[len] != '.'&&ip[len]!='\0')
+            len++;
+        int x = stringToInt1(ip,len);
+        ip = ip + len;
+        if (x > 256 || x < 0 || *ip != '.')
+            return 0;
+    }
+    int len = 0;
+    while (ip[len] != '.' && ip[len] != '\0')
+        len++;
+    int x = stringToInt1(ip, len);
+    ip = ip + len;
+    if (x > 256 || x < 0 )
+        return 0;
 
+    return 1;
 
+}
 
 
 
