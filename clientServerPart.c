@@ -25,13 +25,21 @@ void* clientServerPart() {
 		if (arg.level >= 1) {
 			pthread_mutex_lock(&mutex_arg);
 			printf("\n--------------------------------------\n");
-			printf("client_id:");
+			printf("frame_id:");
 			printCharToBinary(rf->id,4);
+			
 			printf("client_ip:");
 			char clientIp[MAX_LEN_IP] = { 0 };
 			// 将clientAddr.sin_addr转换为字符串
 			inet_ntop(AF_INET, &(clientAddr.sin_addr), clientIp, sizeof(clientIp));
 			printf("%s", clientIp);
+
+			printf("\nclient_port:");
+			int clientPort =  0 ;
+			// 将clientAddr.sin_addr转换为字符串
+			clientPort = clientAddr.sin_port;
+			printf("%d", clientPort);
+
 			printf("\nsearch_domain:%s\n",rf->domain);
 			printf("--------------------------------------\n");
 			pthread_mutex_unlock(&mutex_arg);

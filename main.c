@@ -11,7 +11,7 @@ struct sockaddr_in programeAddrToClient;	//对于用户，这个程序的地址
 struct sockaddr_in clientAddr;	//给这个程序发送请求的客户端的地址
 int clientAddrLen;
 int ispAddrLen;
-myId id[MAX_CONVER_FRAME_SIZE];		////现在正在向上级dns转发的帧的自定义id数组
+myId id[MAX_CONVER_FRAME_SIZE];		//现在正在向上级dns转发的帧的自定义id数组
 pthread_mutex_t mutex_id=PTHREAD_MUTEX_INITIALIZER;		//互斥锁
 pthread_mutex_t mutex_arg = PTHREAD_MUTEX_INITIALIZER;		//main函数的参数互斥锁
 Argv arg;	//main的传入的参数
@@ -49,13 +49,16 @@ int main(int argc,char* argv[]) {
 			arg.level = 2;
 		}
 		strcpy(arg.dnsIp, argv[2]);
-		printf("%s", arg.dnsIp);
 		strcpy(arg.txtPath, argv[3]);
 		
 	}
+	//设置读入的文件
+	if (arg.level != 4) {
+		readFromTxt("dnsrelay.txt");
+	}
+	else
+		readFromTxt(arg.txtPath);
 	
-
-	readFromTxt("dnsrelay.txt");
 	WSADATA wsaData;
 	clientAddrLen = sizeof(clientAddr);
 	ispAddrLen = sizeof(ispAddr);
@@ -72,9 +75,14 @@ int main(int argc,char* argv[]) {
 
 	{// dns服务提供商 地址配置
 		ispAddr.sin_family = AF_INET;//使用ipv4的协议族
-		inet_pton(AF_INET, ISPADDR, &(ispAddr.sin_addr.s_addr));//我想要改为和特定ip通信的socket地址，这个ip是10.3.9.45将本地计算机的所有ip都和这个socket绑定
+		if (arg.level < 3) {
+			inet_pton(AF_INET, ISPADDR, &(ispAddr.sin_addr.s_addr));
+		}
+		else {
+			inet_pton(AF_INET, arg.dnsIp, &(ispAddr.sin_addr.s_addr));
+		}
+		
 		ispAddr.sin_port = htons(PORT_ISP);//dns服务提供商的端口配置
-
 	}
 
 	{//   dns上级服务提供商的socket的配置
@@ -142,10 +150,5 @@ int main(int argc,char* argv[]) {
 		pthread_join(thread_id1, NULL);
 	}
 	
-	
-
-
-	
-
 
 }

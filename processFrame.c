@@ -15,18 +15,16 @@ void getDomain(char frame[], char domain[]) {
 			k++;
 		}
 	}
-	//printf("domain:%s\n",domain);
+	
 
 }
 
 
 void getId(char* frame, unsigned char* id) {
-	////printf("\nid:");
 	for (int i = 0; i < 2; i++) {
 		id[i] = frame[i];
-		//printBinary(id[i]);
 	}
-	////printf("\n");
+	
 	
 }
 //0是查询dns报文，1是回应dns报文
