@@ -11,10 +11,14 @@ void* ispServerPart() {
 		responseFrame* rpf = &respf;//给用户的回应帧
 		struct sockaddr_in recvAddr = { 0 };
 		int recvAddrLen=sizeof(recvAddr);
+		pthread_mutex_lock(&mutex_socketWithIsp);
 		rpf->sizeOfFrame = recvfrom(socketWithIsp, rpf->frame, sizeof(rpf->frame), 0, (struct socketaddr*)&recvAddr, &recvAddrLen);
 		if (rpf->sizeOfFrame <= 0) {
+			pthread_mutex_unlock(&mutex_socketWithIsp);
 			continue;
 		}
+		pthread_mutex_unlock(&mutex_socketWithIsp);
+		
 		//printf("\nframe from superior :");
 		//printCharToBinary(rpf->frame, rpf->sizeOfFrame);
 		getIpAndDomainFromFrame(rpf->frame, rpf->sizeOfFrame,rpf);
@@ -33,10 +37,11 @@ void* ispServerPart() {
 		int cSize = sizeof(id[clientId].addr);
 		//通过ispSocket向用户发送
 		int r = 0;
-
+		pthread_mutex_lock(&mutex_socketWithClient);
  		if ((r=sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*) &(id[clientId].addr), cSize)) < 0) {
 			perror("Error in sendto to isp\n");
 		}
+		pthread_mutex_unlock(&mutex_socketWithClient);
 		pthread_mutex_unlock(&mutex_id);
 		
 

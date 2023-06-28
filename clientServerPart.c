@@ -13,7 +13,9 @@ void* clientServerPart() {
 
 		
 		//接收用户发来的请求帧
+		pthread_mutex_lock(&mutex_socketWithClient);
 		rf->sizeOfFrame = recvfrom(socketWithClient, rf->frame, sizeof(rf->frame), 0, (struct socketaddr*)&clientAddr, &clientAddrLen);
+		pthread_mutex_unlock(&mutex_socketWithClient);
 		if (rf->sizeOfFrame <= 0) {
 			continue;
 		}
@@ -115,10 +117,12 @@ void* clientServerPart() {
 
 			//通过和ISP连接的socket向ISP转发查询请求
 			int r = 0;
+			pthread_mutex_lock(&mutex_socketWithIsp);
 			if ((r=sendto(socketWithIsp, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&ispAddr, ispAddrLen)) < 0) {
 				printf("socket send conver frame to ISP :Error in sendto %d",r);
 				
 			}
+			pthread_mutex_unlock(&mutex_socketWithIsp);
 		}
 		else if (result == -1) {
 			//将返回的rcode设置为3,返回为错误码
