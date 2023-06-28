@@ -21,21 +21,21 @@ typedef struct database {
 }database;
 
 typedef struct query {
-	char domain[MAX_LEN_DOMAIN];
-	char type;
-	char query_class;
+	char domain[MAX_LEN_DOMAIN];//请求的域名
+	char type;//请求的类型
+	char query_class;//请求的类
 }query;
 
 
 
 typedef struct requestion
 {
-	char frame[MAX_FRAME_SIZE];
-	int sizeOfFrame;
-	char ip[MAX_LEN_IP];
-	char domain[MAX_LEN_DOMAIN];
-	unsigned char id[5];
-	unsigned char qr;
+	char frame[MAX_FRAME_SIZE];//存储请求帧
+	int sizeOfFrame;//请求帧的大小
+	char ip[MAX_LEN_IP];//请求的域名的ip
+	char domain[MAX_LEN_DOMAIN];//请求的域名
+	unsigned char id[5];//请求的id
+	unsigned char qr;//1是回应帧，0是请求帧
 	unsigned char opcode;
 	unsigned char aa;
 	unsigned char tc;
@@ -50,18 +50,18 @@ typedef struct requestion
 }requestionFrame;
 
 typedef struct response {
-	char frame[MAX_FRAME_SIZE];
-	int sizeOfFrame;
-	unsigned char ip[MAX_LEN_IP];
-	char domain[MAX_LEN_DOMAIN];
-	unsigned char id[5];
+	char frame[MAX_FRAME_SIZE];//回应帧
+	int sizeOfFrame;//回应帧大小
+	unsigned char ip[MAX_LEN_IP];//请求域名对应的ip
+	char domain[MAX_LEN_DOMAIN];//请求的域名
+	unsigned char id[5];//dns帧的id
 
 }responseFrame;
 
 
 typedef struct myId {
-	char frameId[2];
-	struct sockaddr_in addr;
+	char frameId[2];//请求帧中原先的id位，为无符号
+	struct sockaddr_in addr;//请求帧的ip地址
 }myId;
 
 typedef struct {
