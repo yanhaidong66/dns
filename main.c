@@ -14,8 +14,6 @@ int ispAddrLen;
 myId id[MAX_CONVER_FRAME_SIZE];		//现在正在向上级dns转发的帧的自定义id数组
 pthread_mutex_t mutex_id=PTHREAD_MUTEX_INITIALIZER;		//互斥锁
 pthread_mutex_t mutex_arg = PTHREAD_MUTEX_INITIALIZER;		//main函数的参数互斥锁
-pthread_mutex_t mutex_socketWithIsp = PTHREAD_MUTEX_INITIALIZER;	//和isp通信的socket的互斥锁
-pthread_mutex_t mutex_socketWithClient = PTHREAD_MUTEX_INITIALIZER; //和client通信的socket的互斥锁
 Argv arg;	//main的传入的参数
 int main(int argc,char* argv[]) {
 

@@ -26,7 +26,7 @@ void readFromTxt(const char path[]) {
     FILE* file = fopen(path, "r"); // 打开文件，以只读模式打开
 
     if (file == NULL) {
-        //printf("无法打开文件\n");
+        printf("无法打开文件\n");
         exit(1);
     }
 
@@ -43,6 +43,7 @@ void readFromTxt(const char path[]) {
 
     db.nowSize = db.size + 1;
     fclose(file); // 关闭文件
+    printf("读入文件%s成功\n", path);
 }
 
 
