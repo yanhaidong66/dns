@@ -129,17 +129,21 @@ void* clientServerPart() {
 			rf->frame[3] = rf->frame[3] | 0b00000111;
 			//将rq设置为1，表示为响应报文
 			rf->frame[2] = rf->frame[2] | 0b10000000;
+			pthread_mutex_lock(&mutex_socketWithClient);
 			if (sendto(socketWithClient, rf->frame, rf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
 				perror("send to client : Error in sendto");
 			}
+			pthread_mutex_unlock(&mutex_socketWithClient);
 		}
 
 		//如果找到了向用户返回帧
 		else {
+			pthread_mutex_lock(&mutex_socketWithClient);
 			if (sendto(socketWithClient, rpf->frame, rpf->sizeOfFrame, 0, (const struct sockaddr*)&clientAddr, clientAddrLen) < 0) {
 				perror("send to client : Error in sendto");
 				
 			}
+			pthread_mutex_unlock(&mutex_socketWithClient);
 
 		}
 		
